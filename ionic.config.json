@@ -1,0 +1,7 @@
+{
+  "name": "misiones-travel-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
