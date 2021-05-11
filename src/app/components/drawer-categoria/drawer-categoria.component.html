@@ -1,0 +1,112 @@
+<div class="drawer-categoria" #drawerCategoria>
+  <div class="ion-text-center">
+    <ion-button fill="clear" expand="full" (click)="toggleDrawer()" class="button-drawer">
+      <div class="drawer-pull">
+
+      </div>
+    </ion-button>
+  </div>
+
+  <div class="slide-categorias" *ngIf="categorias && loading">
+    <ion-slides pager="false" [options]="slideOpts">
+      <ion-slide *ngFor="let item of arrayOne(8);">
+        <ion-thumbnail>
+          <ion-skeleton-text animated></ion-skeleton-text>
+          <ion-label>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-label>
+        </ion-thumbnail>
+      </ion-slide>
+    </ion-slides>
+  </div>
+
+  <div class="slide-categorias" *ngIf="categorias && !loading">
+    <ion-slides pager="false" [options]="slideOpts">
+      <ion-slide>
+        <div class="app-buttons">
+          <ion-col size="4">
+            <ion-button size="large" [color]="categoria.slug">
+              <div>
+                <ion-icon slot="start" [src]="'assets/icon/icon_'+categoriaPrincipal+'.svg'"></ion-icon>
+                <strong>{{ categoria.nombre }}</strong>
+              </div>
+            </ion-button>
+          </ion-col>
+        </div>
+      </ion-slide>
+
+      <ion-slide *ngFor="let itemSubCategoria of categorias">
+        <ion-thumbnail (click)="openCategoria(itemSubCategoria)">
+          <img *ngIf="itemSubCategoria.imagen" [src]="itemSubCategoria.imagen?.formats.thumbnail.url">
+          <img *ngIf="!itemSubCategoria.imagen"
+            src="https://static.misionesonline.news/wp-content/uploads/2019/09/Posadas-kn05ms6k7b40-ad5e1ltho0m0.jpg">
+          <ion-label>{{itemSubCategoria.nombre}}</ion-label>
+
+        </ion-thumbnail>
+      </ion-slide>
+    </ion-slides>
+  </div>
+
+  <div class="slide-categorias" *ngIf="lugares && loading">
+    <ion-slides pager="false" [options]="slideOpts">
+      <ion-slide *ngFor="let item of arrayOne(8);">
+        <ion-thumbnail>
+          <ion-skeleton-text animated></ion-skeleton-text>
+          <ion-label>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-label>
+        </ion-thumbnail>
+      </ion-slide>
+    </ion-slides>
+  </div>
+
+  <div class="slide-categorias" *ngIf="lugares && !loading">
+    <ion-slides pager="false" [options]="slideOpts">
+      <ion-slide>
+        <div class="app-buttons">
+          <ion-col size="4">
+            <ion-button size="large" [color]="categoriaPrincipal">
+              <div>
+                <ion-icon slot="start" [src]="'assets/icon/icon_'+categoriaPrincipal+'.svg'"></ion-icon>
+                <strong *ngIf="!loading">{{ lugares?.categoria?.nombre }}</strong>
+                <ion-skeleton-text animated *ngIf="loading"></ion-skeleton-text>
+              </div>
+            </ion-button>
+          </ion-col>
+        </div>
+      </ion-slide>
+
+
+      <ion-slide *ngFor="let itemSubCategoria of lugares.lugares">
+        <ion-thumbnail (click)="openCategoria(itemSubCategoria)">
+          <img *ngIf="itemSubCategoria.imagen_miniatura"
+            [src]="itemSubCategoria.imagen_miniatura?.formats.thumbnail.url">
+          <img *ngIf="!itemSubCategoria.imagen_miniatura"
+            src="https://static.misionesonline.news/wp-content/uploads/2019/09/Posadas-kn05ms6k7b40-ad5e1ltho0m0.jpg">
+          <ion-label>{{itemSubCategoria.nombre}}</ion-label>
+        </ion-thumbnail>
+      </ion-slide>
+
+    </ion-slides>
+  </div>
+
+  <div class="slide-categorias" *ngIf="hoja">
+    <ion-slides pager="false" [options]="slideOpts">
+      <ion-slide *ngFor="let imagenes of hoja.imagenes">
+        <ion-thumbnail>
+          <img [src]="imagenes.formats.thumbnail.url">
+
+        </ion-thumbnail>
+      </ion-slide>
+    </ion-slides>
+  </div>
+
+  <div class="descripcion ion-padding">
+    <label *ngIf="hoja">{{padre.categoria.nombre}}/{{padre.nombre}}</label>
+    <h1><strong>{{ categoria.nombre }}</strong></h1>
+    <p>
+      {{ categoria.descripcion }}
+    </p>
+  </div>
+
+</div>

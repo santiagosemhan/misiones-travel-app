@@ -1,20 +1,78 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
+<!-- <ion-header>
+  <ion-item lines="none" class="item-search">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+    <mat-form-field color="red" class="mat-field-full-width">
+      <input type="text" matInput [matAutocomplete]="auto">
+      <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearMotivo()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-autocomplete [displayWith]="autocompletMotivoDisplay" #auto="matAutocomplete">
+        <mat-option *ngIf="loadingLugares" class="is-loading">Espere...</mat-option>
+        <ng-container *ngIf="!loadingLugares">
+          <mat-option *ngFor="let p of lugares" [value]="p">
+            <span>{{p.descripcion}}</span>
+          </mat-option>
+        </ng-container>
+      </mat-autocomplete>
+    </mat-form-field>
+    </ion-item>
+</ion-header> -->
+
+<ion-content [fullscreen]="true" scrollY="false">
+  <!-- <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Blank</ion-title>
     </ion-toolbar>
-  </ion-header>
+  </ion-header> -->
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+
+
+
+  <!-- <ion-button>Ver Mapa</ion-button> -->
+
+
+  <div id="map" style="height: 100%; width: 100%;"></div>
+
+
+
+  <!-- <ion-item>
+      <ion-label position="floating">Floating Label</ion-label>
+      <ion-input></ion-input>
+    </ion-item> -->
+
+  <!-- <div class="backdrop" [ngClass]="backDropVisible? 'fade-in': 'fade'">
+
+  </div> -->
+
+
+  <app-drawer (openStateChnaged)="toggleBackdrop($event)" (btnClick)="changeCategoria($event,true)"
+    (btnRoute)="goToPath($event)" [categorias]="categorias" *ngIf="showDrawerPrincipal"></app-drawer>
+
+  <mt-drawer-categoria (openStateChnaged)="toggleBackdrop($event)" (btnClick)="changeCategoria($event)"
+    [categoria]="categoriaSelected" [categoriaPrincipal]="categoriaPrincipal" *ngIf="showDrawerCategoria">
+  </mt-drawer-categoria>
+
+  <mt-drawer-circuitos (openStateChnaged)="toggleBackdrop($event)" (btnClick)="changeCircuito($event)"
+    *ngIf="showCircuitos">
+  </mt-drawer-circuitos>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!showDrawerPrincipal">
+    <ion-fab-button (click)="backCategoria()">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="showCircuitos">
+    <ion-fab-button (click)="backCircuitos()">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
 </ion-content>

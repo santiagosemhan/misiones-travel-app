@@ -11,6 +11,22 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
+  {
+    path: 'lugar',
+    loadChildren: () => import('./lugar/lugar.module').then( m => m.LugarPageModule)
+  },
+  {
+    path: 'config',
+    loadChildren: () => import('./config/config.module').then( m => m.ConfigPageModule)
+  },
+  {
+    path: 'circuitos',
+    loadChildren: () => import('./circuitos/circuitos.module').then( m => m.CircuitosPageModule)
+  },
+  {
+    path: 'eventos',
+    loadChildren: () => import('./eventos/eventos.module').then( m => m.EventosPageModule)
+  }
 ];
 
 @NgModule({

@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiUrl: 'https://misiones-travel.herokuapp.com',
+  mapbox: 'pk.eyJ1IjoibWlzaW9uZXN0cmF2ZWwiLCJhIjoiY2tpZzNoZXlkMGEwaDJyczU1MDZhZThzdSJ9.TEpoxSF0t5lH0r2z9A_g6w'
 };
 
 /*

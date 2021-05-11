@@ -24,3 +24,33 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+:root[mode=ios],
+:root[mode=md] {
+  --ion-font-family: 'Poppins', sans-serif !important;
+  font-family: 'Poppins', sans-serif !important;
+
+}
+
+:root {
+  --ion-toolbar-background: transparent;
+}
+
+ion-toolbar {
+  --color: white;
+  --padding-top: 1rem;
+  --padding-start: 1rem;
+  top: 0;
+}
+
+.popup-marker {
+  color: var(--ion-color-primary) !important;
+  font-weight: bold;
+
+}
+
+.mapboxgl-popup-content {
+  border-radius: 2rem;
+}

@@ -1,0 +1,97 @@
+<div class="drawer-circuito" #drawerCircuitos>
+  <div class="ion-text-center">
+    <ion-button fill="clear" expand="full" (click)="toggleDrawer()" class="button-drawer">
+      <div class="drawer-pull">
+
+      </div>
+    </ion-button>
+  </div>
+
+  <div class="slide-circuitos" *ngIf="loading">
+    <ion-slides pager="false" [options]="slideOpts">
+      <ion-slide *ngFor="let item of arrayOne(8);">
+        <ion-thumbnail>
+          <ion-skeleton-text animated></ion-skeleton-text>
+          <ion-label>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-label>
+        </ion-thumbnail>
+      </ion-slide>
+    </ion-slides>
+  </div>
+
+  <div class="slide-circuitos" *ngIf="circuitos && !circuitoSelected && !loading">
+    <ion-slides pager="false" [options]="slideOpts">
+      <ion-slide>
+        <div class="app-buttons">
+          <ion-col size="4">
+            <ion-button size="large" color="circuitos">
+              <div>
+                <ion-icon slot="start" [src]="'assets/icon/icon_circuitos.svg'"></ion-icon>
+                <strong>{{ 'HOME.circuitos' | translate }}</strong>
+              </div>
+            </ion-button>
+          </ion-col>
+        </div>
+      </ion-slide>
+
+      <ion-slide *ngFor="let item of circuitos">
+        <ion-thumbnail (click)="openCircuito(item)">
+          <img *ngIf="item.imagen_miniatura" [src]="item.imagen_miniatura?.formats.thumbnail.url">
+          <img *ngIf="!item.imagen_miniatura"
+            src="https://static.misionesonline.news/wp-content/uploads/2019/09/Posadas-kn05ms6k7b40-ad5e1ltho0m0.jpg">
+          <ion-label>{{item.nombre}}</ion-label>
+
+        </ion-thumbnail>
+      </ion-slide>
+    </ion-slides>
+  </div>
+
+  <div class="descripcion ion-padding" *ngIf="!circuitoSelected">
+    <h1><strong>{{ 'HOME.circuitos' | translate }}</strong></h1>
+    
+  </div>
+  <div class="descripcion ion-padding" *ngIf="circuitoSelected">
+    <label>{{ 'HOME.circuitos' | translate }}</label>
+    <h1><strong>{{circuitoSelected.nombre}}</strong></h1>
+    <p>
+      <strong>Distancia:</strong> {{ circuitoSelected.distancia_total }} Kms<br>
+      <strong>Terreno:</strong> {{circuitoSelected.terreno}}<br>
+      <strong>Localidades:</strong> <span *ngFor="let localidad of localidades"> {{ localidad.nombre }} |</span> <br>
+      <strong>Difucultad:</strong> {{circuitoSelected.dificultad}}<br>
+    </p>
+    <p>
+      {{circuitoSelected.descripcion}}
+    </p>
+    <div class="timeline">
+      <!-- <ion-list>
+        <ion-item *ngFor="let circuito of circuitoSelected.circuito">
+          <ion-note color="light" slot="start">{{circuito.distancia}} {{circuito.unidad_distancia}},
+            {{circuito.tipo_ruta}}</ion-note>
+          <ion-label class="ion-text-wrap">
+            <h2>{{ circuito.lugar.nombre }}</h2>
+          </ion-label>
+        </ion-item>
+      </ion-list> -->
+      <ion-grid>
+        <ion-row *ngFor="let circuito of circuitoSelected.circuito">
+          <ion-col size="3" class="ion-align-self-end">
+            <div class="item-distancia" *ngIf="circuito.distancia">
+              <strong>
+                {{circuito.distancia}} {{circuito.unidad_distancia}},
+                {{circuito.tipo_ruta}}
+              </strong>
+            </div>
+          </ion-col>
+          <ion-col class="lugar-line" (click)="goToLugar(circuito.lugar)">            
+            <div class="item-lugar">
+              <div class="dot"></div>              
+              {{ circuito.lugar.nombre }}
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+
+</div>

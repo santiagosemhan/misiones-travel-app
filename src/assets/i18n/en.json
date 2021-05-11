@@ -1,0 +1,40 @@
+{
+    "LOGIN": {
+        "EMAIL": "Email",
+        "PASSWORD": "Contraseña",
+        "BUTTON_LOGIN": "Iniciar sesión",
+        "EMAIL_ERROR": "¡El correo electrónico debe ser una dirección de correo electrónico válida!",
+        "PASSWORD_LENGTH": "La contraseña debe tener al menos 8 caracteres"
+    },
+    "MENU": {
+        "HOME": "Inicio",
+        "DOC": "Manual",
+        "SCAN": "Escanear código",
+        "LANGUAGE": "Idioma",
+        "CONFIG": "Configuración",
+        "LOGOUT": "Cerrar sesión"
+    },
+    "HOME": {
+        "imperdibles": "Imperdibles",
+        "atracciones": "Atracciones",
+        "circuitos": "Circuitos",
+        "alojamiento": "Alojamiento",
+        "gastronomia": "Gastronomía",
+        "cupones": "Cupones"
+    },
+    "COMMON": {
+        "SEND": "Enviar",
+        "CANCEL": "Cancelar",
+        "OK": "Ok",
+        "BACK": "Atras",
+        "SENDING": "Enviando",
+        "LOADING": "Cargando",
+        "ALERT_TITLE": "Aviso",
+        "SHARE_LOCATION_BUTTON": "Compartir",
+        "LOCATION_ERROR": "Error obteniendo la ubicación",
+        "LOCATION_STORING_LOCATION_ERROR": "Error enviando la ubicación",
+        "LOCATION_STORING_LOCATION_SUCCESS": "Ubicación enviada con éxito",
+        "FIELD_REQUIRED": "Campo obligatorio",
+        "APP_OUTDATED": "La aplicación está desactualizada, por favor actualice!"
+    }
+}

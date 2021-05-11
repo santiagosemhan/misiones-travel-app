@@ -1,0 +1,46 @@
+<div class="drawer-categoria" #drawerLugar>
+
+  <div class="ion-text-center floating-info-button">
+    <ion-button size="small" shape="round" color="blanco" class="button-info" [disabled]="!lugar.telefono">
+      <ion-icon slot="start" name="call-outline"></ion-icon>      
+      Llamar
+    </ion-button>
+
+    <ion-button size="small" shape="round" color="blanco" class="button-info" [disabled]="!lugar.sitio_web">
+      <ion-icon slot="start" name="globe-outline"></ion-icon>
+      Web
+    </ion-button>
+
+    <ion-button size="small" shape="round" color="blanco" class="button-info" [disabled]="!lugar.email">
+      <ion-icon slot="start" name="mail-outline"></ion-icon>
+      Email
+    </ion-button>
+  </div>
+
+  <div class="ion-text-center">
+    <ion-button fill="clear" expand="full" (click)="toggleDrawer()" class="button-drawer">
+      <div class="drawer-pull">
+
+      </div>
+    </ion-button>
+  </div>
+
+  <div class="slide-categorias" *ngIf="lugar">
+    <ion-slides pager="false" [options]="slideOpts">
+      <ion-slide *ngFor="let imagenes of lugar.imagenes; let i = index">
+        <ion-thumbnail (click)="openImagen(i)">
+          <img [src]="imagenes.formats.thumbnail.url">
+        </ion-thumbnail>
+      </ion-slide>
+    </ion-slides>
+  </div>
+
+  <div class="descripcion ion-padding">
+    <!-- <label>{{lugar.categoria.nombre}}/{{padre.nombre}}</label> -->
+    <h1><strong>{{ lugar.nombre }}</strong></h1>
+    <p>
+      {{ lugar.descripcion }}
+    </p>
+  </div>
+
+</div>

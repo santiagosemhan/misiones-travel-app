@@ -1,0 +1,24 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" scrollY="false">
+
+  <div id="map" style="height: 100%; width: 100%;"></div>
+
+  <mt-drawer-circuitos (openStateChnaged)="toggleBackdrop($event)" (btnClick)="changeCircuito($event)"
+      [circuitos]="circuitos">
+  </mt-drawer-circuitos>
+
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="circuitoSelected">
+    <ion-fab-button (click)="backCircuito()">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

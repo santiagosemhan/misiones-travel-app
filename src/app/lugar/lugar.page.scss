@@ -1,0 +1,18 @@
+ion-content {
+    --offset-top: 0px;
+    position: absolute;
+
+
+}
+
+ion-slides {
+    height: 100%;
+
+    ion-slide {
+        img {
+            // width: 200px;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+}
