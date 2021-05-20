@@ -2,6 +2,7 @@ import { ApiService } from './../_services/api.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonSlides } from '@ionic/angular';
+import { stackRouteDrawer } from '../_globals/globals';
 
 @Component({
   selector: 'app-lugar',
@@ -40,6 +41,8 @@ export class LugarPage implements OnInit {
   }
   back() {
     this.router.navigate(['/home'])
+    stackRouteDrawer.pop();
+    console.log('stackRouteDrawer', stackRouteDrawer);
   }
 
   verFoto($event) {

@@ -9,10 +9,10 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Outp
 export class DrawerComponent implements AfterViewInit {
 
   @ViewChild('drawer', { read: ElementRef }) drawer: ElementRef;
-  @Output('openStateChnaged') openState: EventEmitter<boolean> = new EventEmitter();
+  @Output('openStateChanged') openState: EventEmitter<boolean> = new EventEmitter();
   @Output('btnClick') btnClick: EventEmitter<boolean> = new EventEmitter();
   @Output('btnRoute') btnRoute: EventEmitter<boolean> = new EventEmitter();
-  @Input() categorias;
+  // @Input() categorias;
   isOpen = false;
   openHeight = 0;
 
@@ -78,11 +78,11 @@ export class DrawerComponent implements AfterViewInit {
   }
 
   isCategoriaDisabled(categoria) {
-    let cat = this.categorias.filter(function (iCat) {
-      return iCat.slug === categoria;
-    })[0]
+    // let cat = this.categorias.filter(function (iCat) {
+    //   return iCat.slug === categoria;
+    // })[0]
 
-    return !cat.activo;
+    // return !cat.activo;
 
   }
 

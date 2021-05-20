@@ -1,6 +1,7 @@
 import { ApiService } from './../../_services/api.service';
 import { GestureController, Platform } from '@ionic/angular';
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { stackRouteDrawer } from 'src/app/_globals/globals';
 
 
 @Component({
@@ -13,14 +14,20 @@ export class DrawerCategoriaComponent implements AfterViewInit {
   @ViewChild('drawerCategoria', { read: ElementRef }) drawerCategoria: ElementRef;
   @Input() categoria;
   @Input() categoriaPrincipal;
-  @Output('openStateChnaged') openState: EventEmitter<boolean> = new EventEmitter();
-  @Output('btnClick') btnClick: EventEmitter<boolean> = new EventEmitter();
+  @Input() loading;
+  @Output('openStateChanged') openState: EventEmitter<boolean> = new EventEmitter();
+  // @Output('btnClick') btnClick: EventEmitter<boolean> = new EventEmitter();
+  @Output('btnLugarClick') btnLugarClick: EventEmitter<boolean> = new EventEmitter();
+  @Output('redrawMap') redrawMap: EventEmitter<boolean> = new EventEmitter();
+  // @Output('backButton') backButton: EventEmitter<boolean> = new EventEmitter();
 
+  currentCategoria;
+  subCategoria;
   categorias;
   lugares;
   hoja;
   padre;
-  loading = true;
+  // loading = true;
 
   isOpen = false;
   openHeight = 0;
@@ -42,7 +49,7 @@ export class DrawerCategoriaComponent implements AfterViewInit {
   ]
 
   // colores
-
+  changeLog: string[] = [];
 
   constructor(private platform: Platform, private gestureCtrl: GestureController,
     private apiService: ApiService) {
@@ -52,52 +59,65 @@ export class DrawerCategoriaComponent implements AfterViewInit {
 
     let color = this.colores.find((element) => {
 
-      return element[this.categoria.slug]
+      // return element[this.categoria.slug]
+      return element[this.categoria]
     });
 
     if (color)
-      document.documentElement.style.setProperty('--fondo-drawer', color[this.categoria.slug]);
+      document.documentElement.style.setProperty('--fondo-drawer', color[this.categoria]);
 
     this.loadCategorias()
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    console.log('changes', changes)
 
-    console.log(changes)
-    // You can also use categoryId.previousValue and 
-    // categoryId.firstChange for comparing old and new values
+    // if (changes.categoria && changes.categoria.previousValue) {
 
-    if (changes.categoria.currentValue.lugares && changes.categoria.currentValue.lugares.length > 0) {
-      console.log('tiene lugares')
-      this.lugares = changes.categoria.currentValue
-      this.categorias = null;
-      this.hoja = null;
-    } else if (changes.categoria.currentValue.localidad) {
-      console.log('es lugar')
-      this.lugares = null;
-      this.categorias = null;
-      this.hoja = changes.categoria.currentValue;
+    // if (changes.categoria.previousValue == "imperdibles" ||
+    //   changes.categoria.previousValue == "atracciones") {
+    //   this.categoria = changes.categoria.previousValue;
+    // } else if (changes.categoria.previousValue.slug == "imperdibles" ||
+    //   changes.categoria.previousValue.slug == "atracciones") {
+    //   this.categoria = changes.categoria.previousValue.slug;
+    // }
+
+    //   this.subCategoria = null;
+    // this.loadCategorias();
+
+    // }
+    const log: string[] = [];
+    for (const propName in changes) {
+      const changedProp = changes[propName];
+      const to = JSON.stringify(changedProp.currentValue);
+      if (changedProp.isFirstChange()) {
+        log.push(`Initial value of ${propName} set to ${to}`);
+      } else {
+        const from = JSON.stringify(changedProp.previousValue);
+        log.push(`${propName} changed from ${from} to ${to}`);
+      }
     }
-
-    this.padre = changes.categoria.previousValue
-
+    this.changeLog.push(log.join(', '));  
 
 
   }
 
   async loadCategorias() {
+    this.loading = true;
     if (!this.categoria) {
       this.loading = false;
       return;
     }
     let params = {
-      'categoria': this.categoria.id
+      // 'categoria': this.categoria.id,
+      'slug': this.categoria.slug ? this.categoria.slug : this.categoria
     }
     await this.apiService.get('categorias', params).subscribe(
-      (categorias) => {
-        this.categorias = categorias;
+      (categorias: any) => {
+        this.currentCategoria = categorias[0];
+        this.categorias = categorias[0].sub_categorias;
         this.lugares = null;
-        console.log('loadCategorias', categorias)
+        // console.log('loadCategorias', categorias, this.categorias)
         this.loading = false;
       });
   }
@@ -106,19 +126,17 @@ export class DrawerCategoriaComponent implements AfterViewInit {
     return Array(n);
   }
 
-
-
   async ngAfterViewInit() {
 
     const drawerCategoria = this.drawerCategoria.nativeElement;
-    this.openHeight = (this.platform.height() / 100) * 30;
+    this.openHeight = (this.platform.height() / 100) * 40;
     // console.log('openHeight', this.openHeight)
     const gesture = await this.gestureCtrl.create({
       el: drawerCategoria,
       gestureName: 'swipe',
       direction: 'y',
       onMove: evt => {
-        // console.log('onMove', evt)
+        // console.log('onMove', evt.deltaY)
         if (evt.deltaY < -this.openHeight) {
           return;
         }
@@ -127,13 +145,13 @@ export class DrawerCategoriaComponent implements AfterViewInit {
       },
       onEnd: evt => {
         // console.log('onEnd', evt)
-        if (evt.deltaY < -30 && !this.isOpen) {
-          drawerCategoria.style.transition = '.4s ease-out';
+        if (evt.deltaY < -40 && !this.isOpen) {
+          drawerCategoria.style.transition = '.6s ease-out';
           drawerCategoria.style.transform = `translateY(${-this.openHeight}px)`;
           this.openState.emit(true);
           this.isOpen = true;
-        } else if (evt.deltaY > 30 && this.isOpen) {
-          drawerCategoria.style.transition = '.4s ease-out';
+        } else if (evt.deltaY > 40 && this.isOpen) {
+          drawerCategoria.style.transition = '.6s ease-out';
           drawerCategoria.style.transform = '';
           this.openState.emit(false);
           this.isOpen = false;
@@ -148,22 +166,41 @@ export class DrawerCategoriaComponent implements AfterViewInit {
     this.openState.emit(!this.isOpen);
 
     if (!this.isOpen) {
-      drawerCategoria.style.transition = '.4s ease-out';
-      drawerCategoria.style.transform = '';
-      this.isOpen = false;
-    } else {
-      drawerCategoria.style.transition = '.4s ease-out';
+      drawerCategoria.style.transition = '.8s ease-out';
       drawerCategoria.style.transform = `translateY(${-this.openHeight}px)`;
-      this.isOpen = true;
+    } else {
+      drawerCategoria.style.transition = '.8s ease-out';
+      drawerCategoria.style.transform = '';
+    }
+
+    this.isOpen = !this.isOpen;
+  }
+
+  openSubCategoria(itemSubCategoria) {
+    console.log('openSubCategoria(itemSubCategoria)', itemSubCategoria)
+    stackRouteDrawer.push(itemSubCategoria.slug);
+    console.log('stackRouteDrawer', stackRouteDrawer);
+    this.subCategoria = itemSubCategoria;
+
+
+    // si tiene subcategorias
+    if (itemSubCategoria.sub_categorias.length <= 0) {
+      this.loading = true
+
+      this.apiService.get(`categorias/${itemSubCategoria.id}`).subscribe(
+        (categorias: any) => {
+          console.log('${itemSubCategoria.id}', categorias)
+          this.lugares = categorias.lugares
+          this.redrawMap.emit(categorias);
+          this.loading = false;
+        });
     }
   }
 
-  openCategoria(itemSubCategoria) {
-
-    // if (itemSubCategoria.categorias) {
-    this.btnClick.emit(itemSubCategoria);
-    // }
+  openLugar(lugar) {
+    this.btnLugarClick.emit(lugar);
   }
+
 
 }
 

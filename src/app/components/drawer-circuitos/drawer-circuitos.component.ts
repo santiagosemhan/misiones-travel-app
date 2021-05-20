@@ -13,7 +13,7 @@ export class DrawerCircuitosComponent implements OnInit {
 
   @ViewChild('drawerCircuitos', { read: ElementRef }) drawerCircuitos: ElementRef;
   @Input() circuitos;
-  @Output('openStateChnaged') openState: EventEmitter<boolean> = new EventEmitter();
+  @Output('openStateChanged') openState: EventEmitter<boolean> = new EventEmitter();
   @Output('btnClick') btnClick: EventEmitter<boolean> = new EventEmitter();
 
 
@@ -102,7 +102,7 @@ export class DrawerCircuitosComponent implements OnInit {
       direction: 'y',
       onMove: evt => {
         // console.log('onMove', evt)
-        if (evt.deltaY < -this.openHeight) {
+        if (evt.deltaY < this.openHeight) {
           return;
         }
         drawerCircuitos.style.transform = `translateY(${evt.deltaY}px)`
@@ -111,12 +111,12 @@ export class DrawerCircuitosComponent implements OnInit {
       onEnd: evt => {
         // console.log('onEnd', evt)
         if (evt.deltaY < -30 && !this.isOpen) {
-          drawerCircuitos.style.transition = '.4s ease-out';
+          drawerCircuitos.style.transition = '.6s ease-out';
           drawerCircuitos.style.transform = `translateY(${-this.openHeight}px)`;
           this.openState.emit(true);
           this.isOpen = true;
         } else if (evt.deltaY > 30 && this.isOpen) {
-          drawerCircuitos.style.transition = '.4s ease-out';
+          drawerCircuitos.style.transition = '.6s ease-out';
           drawerCircuitos.style.transform = '';
           this.openState.emit(false);
           this.isOpen = false;
@@ -131,14 +131,14 @@ export class DrawerCircuitosComponent implements OnInit {
     this.openState.emit(!this.isOpen);
 
     if (!this.isOpen) {
-      drawerCircuitos.style.transition = '.4s ease-out';
-      drawerCircuitos.style.transform = '';
-      this.isOpen = false;
-    } else {
-      drawerCircuitos.style.transition = '.4s ease-out';
+      drawerCircuitos.style.transition = '.8s ease-out';
       drawerCircuitos.style.transform = `translateY(${-this.openHeight}px)`;
-      this.isOpen = true;
+    } else {
+      drawerCircuitos.style.transition = '.8s ease-out';
+      drawerCircuitos.style.transform = '';
     }
+
+    this.isOpen = !this.isOpen;
   }
 
   openCircuito(circuito) {

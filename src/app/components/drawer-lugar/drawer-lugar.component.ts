@@ -51,7 +51,7 @@ export class DrawerLugarComponent implements OnInit {
 
       return element[this.lugar.slug]
     });
- 
+
     if (color)
       document.documentElement.style.setProperty('--fondo-drawer', color[this.lugar.slug]);
 
@@ -106,8 +106,8 @@ export class DrawerLugarComponent implements OnInit {
       gestureName: 'swipe',
       direction: 'y',
       onMove: evt => {
-        // console.log('onMove', evt)
-        if (evt.deltaY < -this.openHeight) {
+        // console.log('onMove', evt.deltaY)
+        if (evt.deltaY < this.openHeight) {
           return;
         }
         drawerLugar.style.transform = `translateY(${evt.deltaY}px)`
@@ -116,12 +116,12 @@ export class DrawerLugarComponent implements OnInit {
       onEnd: evt => {
         // console.log('onEnd', evt)
         if (evt.deltaY < -30 && !this.isOpen) {
-          drawerLugar.style.transition = '.4s ease-out';
+          drawerLugar.style.transition = '.6s ease-out';
           drawerLugar.style.transform = `translateY(${-this.openHeight}px)`;
           this.openState.emit(true);
           this.isOpen = true;
         } else if (evt.deltaY > 30 && this.isOpen) {
-          drawerLugar.style.transition = '.4s ease-out';
+          drawerLugar.style.transition = '.6s ease-out';
           drawerLugar.style.transform = '';
           this.openState.emit(false);
           this.isOpen = false;
@@ -136,19 +136,21 @@ export class DrawerLugarComponent implements OnInit {
     this.openState.emit(!this.isOpen);
 
     if (!this.isOpen) {
-      drawerLugar.style.transition = '.4s ease-out';
-      drawerLugar.style.transform = '';
-      this.isOpen = false;
-    } else {
-      drawerLugar.style.transition = '.4s ease-out';
+      drawerLugar.style.transition = '.8s ease-out';
       drawerLugar.style.transform = `translateY(${-this.openHeight}px)`;
-      this.isOpen = true;
+    } else {
+      drawerLugar.style.transition = '.8s ease-out';
+      drawerLugar.style.transform = '';
     }
+
+    this.isOpen = !this.isOpen;
   }
 
-
-
-  openImagen(imagen){
+  openImagen(imagen) {
+    // this.toggleDrawer()
+    const drawerLugar = this.drawerLugar.nativeElement;
+    drawerLugar.style.transition = '.8s ease-out';
+    drawerLugar.style.transform = '';
     this.btnClick.emit(imagen);
   }
 }

@@ -52,6 +52,26 @@ export class MapboxService {
 
   }
 
+  updateMap(latlang) {
+    console.log(this.mapa, latlang);
+    // this.mapa.on('data', function () {
+    //   console.log('A data event occurred.');
+    // });
+    let map = this.mapa
+    map.on('foo', function () {
+      map.flyTo({
+        center: [latlang.location.coordinates[0], latlang.location.coordinates[1]],
+        zoom: 16
+      });
+    })
+    map.fire('foo');
+
+    // map.flyTo({
+    //   center: [latlang.location.coordinates[0], latlang.location.coordinates[1]],
+    //   zoom: 16
+    // });
+  }
+
   marker(map, lng, lat) {
 
     let el = document.createElement('div');
@@ -61,19 +81,12 @@ export class MapboxService {
     el.style.height = '50px';
     el.style.backgroundRepeat = 'no-repeat';
 
-    // return new mapboxgl.Marker({
-    //   draggable: false,
-    //   // element: './assets/pins/pin_ud_esta_aqui.svg'
-    // })
-    //   .setLngLat([lng, lat])
-    //   .addTo(map);
-
     return new mapboxgl.Marker(el)
       .setLngLat([lng, lat])
       .addTo(map);
-
-
   }
+
+
   placename(lng, lat) {
     let token = environment.mapbox
     let url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?types=poi&access_token=${token}`;
@@ -96,29 +109,29 @@ export class MapboxService {
       .pipe();
   }
 
-  updateLayer(elementId, lat = -27.3773499, lng = -55.8801476, geoJson, callback) {
+  updateLayer(elementId, lat = -27.3773499, lng = -55.8801476, zoom = 12, geoJson, callback) {
     console.log('geoJson', geoJson, this.mapa)
 
-    // let map = this.mapa
-    let map = new mapboxgl.Map({
-      // style: 'mapbox://styles/mapbox/streets-v11',
-      style: this.mapStyle,
+    let map = this.mapa
+
+    map.flyTo({
       center: [lng, lat],
-      zoom: 12,
-      // pitch: 45,
-      // bearing: -17.6, 
-      container: elementId,
-      antialias: true,
-      "transition": {
-        "duration": 300,
-        "delay": 0
-      }
+      zoom: zoom
     });
 
-    // map.addControl(new mapboxgl.NavigationControl());
+    document.querySelectorAll('.marker').forEach(function (a) {
+      a.remove()
+    })
+    if (map.getSource('route')) {
+      if (map.getLayer('route')) {
+        map.removeLayer('route');
+        map.removeSource('route');
+      }
+
+    }
 
     geoJson.features.forEach(function (marker) {
-      console.log('marker', marker)
+      // console.log('marker', marker)
       if (marker.geometry) {
         // create a DOM element for the marker
         let el = document.createElement('div');
@@ -173,26 +186,11 @@ export class MapboxService {
   drawPrincipales(elementId, lat = -27.3773499, lng = -55.8801476, geoJson, callback) {
     // console.log('geoJson', geoJson, this.mapa)
 
-    // let map = this.mapa
-    let map = new mapboxgl.Map({
-      // style: 'mapbox://styles/mapbox/streets-v11',
-      style: this.mapStyle,
+    let map = this.mapa
 
-      // center: [-54.8539037, -27.2197932],
-      // center: [-55.0079017,-27.3562242],
-      // center: [-55.1653047,-27.5784692],
-      // center: [-55.3226567,-27.4848362],
-      // center: [-55.4389047,-28.0519852],
+    map.flyTo({
       center: [-54.6580317, -28.1331273],
-      zoom: 6.5,
-      // pitch: 45,
-      // bearing: -17.6, 
-      container: elementId,
-      antialias: true,
-      "transition": {
-        "duration": 300,
-        "delay": 0
-      }
+      zoom: 6.5
     });
 
     this.marker(map, lng, lat)
@@ -255,23 +253,21 @@ export class MapboxService {
   drawCircuitos(elementId, lat = -27.3773499, lng = -55.8801476, geoJson, coordinates, modalidad, callback?) {
     console.log('geoJson', geoJson, this.mapa)
 
-    // let map = this.mapa
-    let map = new mapboxgl.Map({
-      // style: 'mapbox://styles/mapbox/streets-v11',
-      style: this.mapStyle,
+    let map = this.mapa
+
+    map.flyTo({
       center: [lng, lat],
       zoom: 12,
-      // pitch: 45,
-      // bearing: -17.6, 
-      container: elementId,
-      antialias: true,
-      "transition": {
-        "duration": 300,
-        "delay": 0
-      }
     });
 
     // map.addControl(new mapboxgl.NavigationControl());
+
+    // console.log()
+    // document.getElementsByClassName('marker')
+
+    document.querySelectorAll('.marker').forEach(function (a) {
+      a.remove()
+    })
 
     geoJson.features.forEach(function (marker) {
       console.log('marker', marker)
@@ -323,7 +319,15 @@ export class MapboxService {
       }
     });
 
-    console.log('coordinates', coordinates)
+    // console.log('coordinates', coordinates)
+
+    // if (map.getSource('route')) {
+    //   // map.removeSource('route');
+    //   map.getSource('route').setData({});
+    // }
+    // if (map.getLayer('route')) {
+    //   map.removeLayer('route');
+    // }
 
     this.getDirections(coordinates, modalidad).subscribe((result: any) => {
       console.log('getDirections', result)
@@ -332,46 +336,46 @@ export class MapboxService {
 
         map.on('load', function () {
           console.log('onload geometry', geometry);
-          map.addSource('route', {
-            'type': 'geojson',
-            'data': {
+
+          if (map.getSource('route')) {
+            map.getSource('route').setData({
               'type': 'Feature',
               'properties': {},
-              // 'geometry': {
-              //   'type': 'LineString',
-              //   'coordinates': coordinates
-              // }
               'geometry': geometry
-            }
-          });
-          map.addLayer({
-            'id': 'route',
-            'type': 'line',
-            'source': 'route',
-            'layout': {
-              'line-join': 'round',
-              'line-cap': 'round'
-            },
-            'paint': {
-              'line-color': '#0000ff',
-              // 'line-color': '#0071BB',
-              'line-width': 7
-            }
-          });
-        })
-      }
+            })
 
+          } else {
+            map.addSource('route', {
+              'type': 'geojson',
+              'data': {
+                'type': 'Feature',
+                'properties': {},
+                'geometry': geometry
+              }
+            });
+            map.addLayer({
+              'id': 'route',
+              'type': 'line',
+              'source': 'route',
+              'layout': {
+                'line-join': 'round',
+                'line-cap': 'round'
+              },
+              'paint': {
+                'line-color': '#0000ff',
+                'line-width': 7
+              }
+            });
+          }
+
+        })
+        map.fire('load')
+      }
     })
 
   }
 
   getDirections(coordinates, profile = 'driving') {
-
-    // let coordinatesParams = [];
-
-    // coordinates.forEach(item => {
-    //   coordinatesParams.push
-    // });
 
     let param = coordinates.join(";")
 

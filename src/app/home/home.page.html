@@ -52,14 +52,15 @@
   </div> -->
 
 
-  <app-drawer (openStateChnaged)="toggleBackdrop($event)" (btnClick)="changeCategoria($event,true)"
-    (btnRoute)="goToPath($event)" [categorias]="categorias" *ngIf="showDrawerPrincipal"></app-drawer>
+  <app-drawer (openStateChanged)="toggleBackdrop($event)" (btnClick)="openCategoria($event)"
+    (btnRoute)="goToPath($event)" *ngIf="showDrawerPrincipal"></app-drawer>
 
-  <mt-drawer-categoria (openStateChnaged)="toggleBackdrop($event)" (btnClick)="changeCategoria($event)"
-    [categoria]="categoriaSelected" [categoriaPrincipal]="categoriaPrincipal" *ngIf="showDrawerCategoria">
+  <mt-drawer-categoria (openStateChanged)="toggleBackdrop($event)" (btnLugarClick)="openLugar($event)"
+    (redrawMap)="redrawMap($event)" [loading]="loading" [categoria]="categoriaSelected"
+    [categoriaPrincipal]="categoriaPrincipal" *ngIf="showDrawerCategoria">
   </mt-drawer-categoria>
 
-  <mt-drawer-circuitos (openStateChnaged)="toggleBackdrop($event)" (btnClick)="changeCircuito($event)"
+  <mt-drawer-circuitos (openStateChanged)="toggleBackdrop($event)" (btnClick)="changeCircuito($event)"
     *ngIf="showCircuitos">
   </mt-drawer-circuitos>
 

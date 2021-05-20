@@ -1,3 +1,4 @@
+import { stackRouteDrawer } from './../_globals/globals';
 import { MsgService } from './../_services/msg.service';
 import { ApiService } from './../_services/api.service';
 import { MapboxService } from './../_services/mapbox.service';
@@ -32,6 +33,8 @@ export class HomePage implements OnInit {
     longitud: null,
     latitud: null
   };
+  backButton = null;
+  loading = false;
 
   constructor(public modalController: ModalController,
     private changeDetectorRef: ChangeDetectorRef,
@@ -46,38 +49,39 @@ export class HomePage implements OnInit {
   ngOnInit() {
 
     this.msgService.presentLoading('Cargando...')
-    this.initMap();
+
     this.loadCategorias();
-
-
 
   }
 
   initMap() {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        console.log('initmap')
 
-    setTimeout(() => {
-      console.log('initmap')
+        this.geolocation.getCurrentPosition().then((resp) => {
+          // resp.coords.latitude
+          // resp.coords.longitude
+          console.log('getCurrentPosition', resp)
+          this.mapa = this.mapBoxService.mostrarMapa('map', resp.coords.latitude, resp.coords.longitude)
+          let coordinates = `${resp.coords.latitude},${resp.coords.longitude}`
+          this.coordinates.latitud = resp.coords.latitude
+          this.coordinates.longitud = resp.coords.longitude
+          // this.load5Near(coordinates);
+          // this.loadPrincipales();
+          resolve('resolved');
 
-      this.geolocation.getCurrentPosition().then((resp) => {
-        // resp.coords.latitude
-        // resp.coords.longitude
-        console.log('getCurrentPosition', resp)
-        this.mapa = this.mapBoxService.mostrarMapa('map', resp.coords.latitude, resp.coords.longitude)
-        let coordinates = `${resp.coords.latitude},${resp.coords.longitude}`
-        this.coordinates.latitud = resp.coords.latitude
-        this.coordinates.longitud = resp.coords.longitude
-        // this.load5Near(coordinates);
-        // this.loadPrincipales();
-
-      }).catch((error) => {
-        console.log('Error getting location', error);
-      });
+        }).catch((error) => {
+          console.log('Error getting location', error);
+        });
 
 
-    }, 300)
+      }, 300)
+    });
   }
 
   async loadCategorias() {
+    const reslt = await this.initMap();
 
     let params = {
       // 'activo': true
@@ -89,16 +93,11 @@ export class HomePage implements OnInit {
         this.categorias = categorias
         console.log('categorias', categorias)
         this.msgService.dismissLoading()
+        this.loading = false;
 
         this.loadPrincipales();
 
       });
-
-    // await this.loadPrincipales();
-
-
-
-    // return;
 
   }
 
@@ -143,7 +142,6 @@ export class HomePage implements OnInit {
       }
       if (categoria.slug == 'atracciones') {
 
-
         categoria.lugares.forEach(lugar => {
           if (lugar.location && atracciones <= 15) {
             geoJson.features.push(
@@ -169,8 +167,6 @@ export class HomePage implements OnInit {
 
       }
     });
-
-
 
     this.mapBoxService.drawPrincipales('map', this.coordinates.latitud, this.coordinates.longitud, geoJson, (id) => { this.goToLugar(id) })
   }
@@ -203,191 +199,112 @@ export class HomePage implements OnInit {
     this.changeDetectorRef.detectChanges();
   }
 
-  changeCategoria($event, principal?) {
-    console.log('changeCategoria', $event)
+  openCategoria(categoria) {
+    this.showDrawerPrincipal = false;
+    this.categoriaSelected = categoria;
 
-    if ($event) {
-      this.showDrawerPrincipal = false;
+    // empty array
+    stackRouteDrawer.splice(0, stackRouteDrawer.length);
+    stackRouteDrawer.push(categoria);
 
+    console.log('stackRouteDrawer', stackRouteDrawer)
 
-      if ($event == 'circuito') {
-        this.showCircuitos = true;
-        this.categoriaSelected = false;
-        return;
-      }
-
-      if (principal) {
-        this.categoriaPrincipal = $event
-      }
-      this.showDrawerCategoria = true;
-
-      console.log('se fue por aca')
-
-
-
-      // this.msgService.presentLoading();
-
-
-      // let params = {
-      //   slug: $event
-      // }
-      // this.apiService.get('categorias', params).subscribe((categoria: any) => {
-      //   this.categoriaSelected = categoria;
-      //   this.msgService.dismissLoading();
-      //   this.esLugar = false;
-
-      //   if (categoria.lugares) {
-      //     this.esLugar = false;
-      //     // add markers
-
-      //     let geoJson = {
-      //       type: 'FeatureCollection',
-      //       features: []
-      //     };
-      //     categoria.lugares.forEach((lugar) => {
-
-      //       console.log('lugar cat princ', lugar, this.categoriaPrincipal)
-
-      //       geoJson.features.push(
-      //         {
-      //           "type": "Feature",
-      //           "geometry": lugar.location,
-      //           "properties": {
-      //             "title": lugar.nombre,
-      //             "id": lugar.id,
-      //             "icon": {
-      //               "iconUrl": `/assets/pins/pin_${this.categoriaPrincipal}.svg`,
-      //               // "iconUrl": `assets/pins/pin_imperdibles.svg`,
-      //               "iconSize": [30, 30], // size of the icon
-      //               "iconAnchor": [25, 25], // point of the icon which will correspond to marker's location
-      //               "popupAnchor": [0, -25], // point from which the popup should open relative to the iconAnchor
-      //               "className": "dot"
-      //             }
-      //           }
-      //         }
-      //       )
-
-      //     });
-
-      //     this.mapBoxService.updateLayer('map', this.categoriaSelected.geoposicion.latitud, this.categoriaSelected.geoposicion.longitud, geoJson, (id) => { this.goToLugar(id) })
-      //   }
-
-      // })
-
-
-
-      let result = this.categorias.filter(function (categoria) {
-        return categoria.slug === $event;
-      })[0];
-      console.log('changeCategoria result', result);
-      this.categoriaSelected = result;
-      this.esLugar = false;
-
-      // cuando es un lugar
-      if (!result && $event.lugares) {
-        this.categoriaSelected = $event;
-        this.esLugar = true;
-
-        // add markers
-
-        let geoJson = {
-          type: 'FeatureCollection',
-          features: []
-        };
-
-        let indexCenter = 0;
-        let center = {
-          lat: null,
-          lang: null
-        }
-        this.categoriaSelected.lugares.forEach((lugar) => {
-
-          console.log('lugar cat princ', lugar, this.categoriaPrincipal)
-
-          geoJson.features.push(
-            {
-              "type": "Feature",
-              "geometry": lugar.location,
-              "properties": {
-                "title": lugar.nombre,
-                "id": lugar.id,
-                "icon": {
-                  "iconUrl": `/assets/pins/pin_${this.categoriaPrincipal}.svg`,
-                  // "iconUrl": `assets/pins/pin_imperdibles.svg`,
-                  "iconSize": [30, 30], // size of the icon
-                  "iconAnchor": [25, 25], // point of the icon which will correspond to marker's location
-                  "popupAnchor": [0, -25], // point from which the popup should open relative to the iconAnchor
-                  "className": "dot"
-                }
-              }
-            }
-          )
-
-          if (indexCenter <= 0) {
-            center.lat = lugar.geoposicion.latitud
-            center.lang = lugar.geoposicion.longitud
-          }
-
-          indexCenter++;
-
-
-        });
-
-        // this.mapBoxService.updateLayer('map', this.categoriaSelected.geoposicion.latitud, this.categoriaSelected.geoposicion.longitud, geoJson, (id) => { this.goToLugar(id) })
-        this.mapBoxService.updateLayer('map', center.lat, center.lang, geoJson, (id) => { this.goToLugar(id) })
-      }
-
-      // cuando es una hoja      
-      if (!result && $event.categorias) {
-        this.categoriaSelected = $event;
-        this.esLugar = true;
-        // this.router.navigate(['/lugar', this.categoriaSelected.id]);
-        this.goToLugar(this.categoriaSelected.id);
-      }
+    if (categoria == 'circuito') {
+      this.showCircuitos = true;
+      return;
     }
 
+    this.categoriaPrincipal = categoria;
+    this.showDrawerCategoria = true;
+  }
+
+  openLugar($event) {
+    this.categoriaSelected = $event;
+    this.esLugar = true;
+
+    this.mapa.flyTo({
+      center: this.categoriaSelected.location.coordinates,
+      zoom: 16
+    });
+    this.goToLugar(this.categoriaSelected.id);
   }
 
   goToLugar(lugarId) {
     this.router.navigate(['/lugar', lugarId])
   }
 
+  redrawMap(item) {
+    // add markers
+
+    let geoJson = {
+      type: 'FeatureCollection',
+      features: []
+    };
+
+    let indexCenter = 0;
+    let center = {
+      lat: -28.1331273,
+      lang: -54.6580317
+    }
+    item.lugares.forEach((lugar) => {
+
+      // console.log('lugar cat princ', lugar, this.categoriaPrincipal)
+
+      geoJson.features.push(
+        {
+          "type": "Feature",
+          "geometry": lugar.location,
+          "properties": {
+            "title": lugar.nombre,
+            "id": lugar.id,
+            "icon": {
+              "iconUrl": `/assets/pins/pin_${this.categoriaPrincipal}.svg`,
+              "iconSize": [30, 30], // size of the icon
+              "iconAnchor": [25, 25], // point of the icon which will correspond to marker's location
+              "popupAnchor": [0, -25], // point from which the popup should open relative to the iconAnchor
+              "className": "dot"
+            }
+          }
+        }
+      )
+
+      if (indexCenter <= 0) {
+        center.lat = lugar.geoposicion.latitud
+        center.lang = lugar.geoposicion.longitud
+      }
+
+      indexCenter++;
+    });
+
+    this.loading = false;
+
+    if (this.categoriaPrincipal == "imperdibles") {
+      this.mapBoxService.updateLayer('map', center.lat, center.lang, 12, geoJson, (id) => { this.goToLugar(id) })
+    } else if (this.categoriaPrincipal == "atracciones") {
+      this.mapBoxService.updateLayer('map', -28.1331273, -54.6580317, 6, geoJson, (id) => { this.goToLugar(id) })
+    }
+
+  }
+
   backCategoria() {
-    // if (this.esLugar) {
-    //   this.categoriaSelected = this.categoriaSelected.categoria;
-    // } else {
-    //   this.categoriaSelected = this.categoriaPrincipal;
-    // }
-    // if (this.categoriaPrincipal == this.categoriaSelected){
+    // console.log('backCategoria()', this.backButton)
+    stackRouteDrawer.pop()
+    console.log('stackRouteDrawer', stackRouteDrawer)
+this.categoriaSelected = 'imperdibles';
+    if (stackRouteDrawer.length > 0) {
+      console.log('back')
+      if (stackRouteDrawer.length == 1) {
+        this.categoriaSelected = stackRouteDrawer[0];
 
-    // }
+      } else {
+        this.categoriaSelected = stackRouteDrawer[stackRouteDrawer.length - 1];
+      }
 
-    // this.categoriaSelected = this.toBack;
-
-
-
-    // if (!this.categoriaSelected.categoria) {
-    //   this.categoriaSelected = null;
-    // } else if (this.categoriaSelected.categoria && this.categoriaPrincipal) {
-    //   this.categoriaSelected = this.categoriaSelected.categoria
-    // }
-
-    // if (this.esLugar) {
-    //   this.categoriaSelected = this.categoriaSelected.categoria;
-    // } else if (!this.esLugar && this.categoriaSelected.categoria) {
-    //   this.categoriaSelected = this.toBack;
-    // } else {
-    //   this.categoriaSelected = null;
-    //   this.initMap();
-    // }
-
-    console.log('back btn ', this.categoriaSelected.categoria, this.categoriaPrincipal, this.esLugar)
-    // if (!this.categoriaSelected.categoria) {
-    //   this.categoriaSelected = null;
-    // }
-    this.showCircuitos = false;
-    this.showDrawerPrincipal = true;
-    this.showDrawerCategoria = false;
+    } else {
+      this.showCircuitos = false;
+      this.showDrawerPrincipal = true;
+      this.showDrawerCategoria = false;
+    }
   }
 
 
@@ -437,7 +354,8 @@ export class HomePage implements OnInit {
 
   dibujarCircuito(circuito) {
     // add markers
-    let center = circuito[0].lugar.geoposicion;
+    // let center = circuito[0].lugar.geoposicion;
+    let center = circuito[0].lugar.location.coordinates;
     // let center = circuito.circuito[0].location.coordinates;
     let coordinates = [];
     let geoJson = {
@@ -476,7 +394,7 @@ export class HomePage implements OnInit {
     });
 
     console.log('center', center)
-    this.mapBoxService.drawCircuitos('map', center.latitud, center.longitud, geoJson, coordinates, circuito.modalidad)
+    this.mapBoxService.drawCircuitos('map', center[1], center[0], geoJson, coordinates, circuito.modalidad, (id) => { this.goToLugar(id) })
   }
 
   changeCircuito(item) {
@@ -495,7 +413,6 @@ export class HomePage implements OnInit {
 
   goToPath(path) {
     this.router.navigate([path])
-
   }
 
 }
