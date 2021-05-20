@@ -290,7 +290,7 @@ export class HomePage implements OnInit {
     // console.log('backCategoria()', this.backButton)
     stackRouteDrawer.pop()
     console.log('stackRouteDrawer', stackRouteDrawer)
-this.categoriaSelected = 'imperdibles';
+
     if (stackRouteDrawer.length > 0) {
       console.log('back')
       if (stackRouteDrawer.length == 1) {
