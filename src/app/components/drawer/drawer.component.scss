@@ -71,4 +71,17 @@
             margin-bottom: 1rem;
         }
     }
+
+    .md ion-button div {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        font-size: .6rem;
+
+        ion-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+    }
+    
 }
