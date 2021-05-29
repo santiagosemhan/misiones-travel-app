@@ -164,11 +164,10 @@ export class DrawerLugarComponent implements OnInit {
     window.open(`tel:${this.lugar.telefono}`, '_system');
   }
   comoLlegar() {
-    if (this.platform.is('android')) {
-      window.location.href = `geo:${this.lugar.geoposicion.latitud},${this.lugar.geoposicion.longitud}`;
+    if (this.platform.is('android')) {      
+      window.location.href = `https://maps.google.com/?q=${this.lugar.geoposicion.latitud},${this.lugar.geoposicion.longitud}`;
     } else {
       window.location.href = `maps://maps.apple.com/?q=${this.lugar.geoposicion.latitud},${this.lugar.geoposicion.longitud}`;
-      // window.open('geo://'+this.lugar.geoposicion.latitud+', '+this.lugar.geoposicion.longitude+'?q='+query,+'_system');
     }
   }
 }

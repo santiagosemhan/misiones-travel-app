@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Misiones Travel</string>
+    <string name="title_activity_main">Misiones Travel</string>
+    <string name="package_name">ar.com.misionestravelapp</string>
+    <string name="custom_url_scheme">ar.com.misionestravelapp</string>
+</resources>

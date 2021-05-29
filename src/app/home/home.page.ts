@@ -65,7 +65,7 @@ export class HomePage implements OnInit {
           // resp.coords.longitude
           console.log('getCurrentPosition', resp)
           this.mapa = this.mapBoxService.mostrarMapa('map', resp.coords.latitude, resp.coords.longitude)
-          let coordinates = `${resp.coords.latitude},${resp.coords.longitude}`
+          // let coordinates = `${resp.coords.latitude},${resp.coords.longitude}`
           this.coordinates.latitud = resp.coords.latitude
           this.coordinates.longitud = resp.coords.longitude
           // this.loadNears(coordinates);          
@@ -73,6 +73,13 @@ export class HomePage implements OnInit {
 
         }).catch((error) => {
           console.log('Error getting location', error);
+          let lat = -28.1331273;
+          let lang = -54.6580317;
+          this.mapa = this.mapBoxService.mostrarMapa('map', lat, lang)
+          // let coordinates = `${resp.coords.latitude},${resp.coords.longitude}`
+          this.coordinates.latitud = lat
+          this.coordinates.longitud = lang
+          resolve('resolved');
         });
 
 
