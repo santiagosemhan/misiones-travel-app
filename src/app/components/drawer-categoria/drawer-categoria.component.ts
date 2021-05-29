@@ -1,7 +1,7 @@
 import { ApiService } from './../../_services/api.service';
 import { GestureController, Platform } from '@ionic/angular';
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { stackRouteDrawer } from 'src/app/_globals/globals';
+import { stackRouteDrawer, stackRouteDw, mainCategory } from 'src/app/_globals/globals';
 
 
 @Component({
@@ -16,11 +16,11 @@ export class DrawerCategoriaComponent implements AfterViewInit {
   @Input() categoriaPrincipal;
   @Input() loading;
   @Output('openStateChanged') openState: EventEmitter<boolean> = new EventEmitter();
-  // @Output('btnClick') btnClick: EventEmitter<boolean> = new EventEmitter();
   @Output('btnLugarClick') btnLugarClick: EventEmitter<boolean> = new EventEmitter();
   @Output('redrawMap') redrawMap: EventEmitter<boolean> = new EventEmitter();
-  // @Output('backButton') backButton: EventEmitter<boolean> = new EventEmitter();
+  @Output('btnChangeCategoria') changeCategoria: EventEmitter<boolean> = new EventEmitter();
 
+  objCategoriaPrincipal;
   currentCategoria;
   subCategoria;
   categorias;
@@ -57,49 +57,65 @@ export class DrawerCategoriaComponent implements AfterViewInit {
 
   ngOnInit() {
 
+    stackRouteDw.subscribe((data) => {
+      this.loading = true;
+      console.log('stackRouteDw', data)
+      // TODO fix 3 calls
+      if (data && data.length > 0) {
+        this.categorias = null;
+        this.lugares = null;
+        this.categoria = data[data.length - 1];
+        this.loadCategorias();
+      }
+    })
+
     let color = this.colores.find((element) => {
 
       // return element[this.categoria.slug]
-      return element[this.categoria]
+      return element[mainCategory[0]]
     });
 
     if (color)
-      document.documentElement.style.setProperty('--fondo-drawer', color[this.categoria]);
+      document.documentElement.style.setProperty('--fondo-drawer', color[mainCategory[0]]);
 
-    this.loadCategorias()
+    this.loadCategorias();
+    this.loadCategoriaPrincipal();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    console.log('changes', changes)
+  // ngOnChanges(changes: SimpleChanges) {
+  //   console.log('changes', changes)
 
-    // if (changes.categoria && changes.categoria.previousValue) {
+  //   // if (changes.categoria && changes.categoria.previousValue) {
 
-    // if (changes.categoria.previousValue == "imperdibles" ||
-    //   changes.categoria.previousValue == "atracciones") {
-    //   this.categoria = changes.categoria.previousValue;
-    // } else if (changes.categoria.previousValue.slug == "imperdibles" ||
-    //   changes.categoria.previousValue.slug == "atracciones") {
-    //   this.categoria = changes.categoria.previousValue.slug;
-    // }
+  //   // if (changes.categoria.previousValue == "imperdibles" ||
+  //   //   changes.categoria.previousValue == "atracciones") {
+  //   //   this.categoria = changes.categoria.previousValue;
+  //   // } else if (changes.categoria.previousValue && (changes.categoria.previousValue.slug == "imperdibles" ||
+  //   //   changes.categoria.previousValue.slug == "atracciones")) {
+  //   //   this.categoria = changes.categoria.previousValue.slug;
+  //   // }
 
-    //   this.subCategoria = null;
-    // this.loadCategorias();
+  //   //   this.subCategoria = null;
+  //   this.loadCategorias();
 
-    // }
-    const log: string[] = [];
-    for (const propName in changes) {
-      const changedProp = changes[propName];
-      const to = JSON.stringify(changedProp.currentValue);
-      if (changedProp.isFirstChange()) {
-        log.push(`Initial value of ${propName} set to ${to}`);
-      } else {
-        const from = JSON.stringify(changedProp.previousValue);
-        log.push(`${propName} changed from ${from} to ${to}`);
-      }
+  //   // }
+
+
+  // }
+
+  async loadCategoriaPrincipal() {
+    this.loading = true;
+
+    let params = {
+      'slug': this.categoriaPrincipal
     }
-    this.changeLog.push(log.join(', '));  
+    await this.apiService.get('categorias', params).subscribe(
+      (categoriaPrincipal: any) => {
 
+        this.objCategoriaPrincipal = categoriaPrincipal[0];
 
+        this.loading = false;
+      });
   }
 
   async loadCategorias() {
@@ -109,14 +125,22 @@ export class DrawerCategoriaComponent implements AfterViewInit {
       return;
     }
     let params = {
-      // 'categoria': this.categoria.id,
       'slug': this.categoria.slug ? this.categoria.slug : this.categoria
     }
     await this.apiService.get('categorias', params).subscribe(
       (categorias: any) => {
+        console.log('getCategroia', categorias[0])
         this.currentCategoria = categorias[0];
-        this.categorias = categorias[0].sub_categorias;
         this.lugares = null;
+        this.categorias = null;
+        this.subCategoria = null;
+
+        if (categorias[0].sub_categorias.length > 0) {
+          this.categorias = categorias[0].sub_categorias;
+        } else if (categorias[0].lugares.length > 0) {
+          this.lugares = categorias[0].lugares;
+        }
+
         // console.log('loadCategorias', categorias, this.categorias)
         this.loading = false;
       });
@@ -177,25 +201,27 @@ export class DrawerCategoriaComponent implements AfterViewInit {
   }
 
   openSubCategoria(itemSubCategoria) {
-    console.log('openSubCategoria(itemSubCategoria)', itemSubCategoria)
+    this.loading = true;
+    this.categorias = null;
+
+    // console.log('openSubCategoria(itemSubCategoria)', itemSubCategoria)
     stackRouteDrawer.push(itemSubCategoria.slug);
-    console.log('stackRouteDrawer', stackRouteDrawer);
+    // console.log('stackRouteDrawer', stackRouteDrawer);
     this.subCategoria = itemSubCategoria;
 
-
-    // si tiene subcategorias
     if (itemSubCategoria.sub_categorias.length <= 0) {
-      this.loading = true
 
       this.apiService.get(`categorias/${itemSubCategoria.id}`).subscribe(
         (categorias: any) => {
-          console.log('${itemSubCategoria.id}', categorias)
+          // console.log('${itemSubCategoria.id}', categorias)
           this.lugares = categorias.lugares
           this.redrawMap.emit(categorias);
           this.loading = false;
         });
     }
+    // this.loading = false;
   }
+
 
   openLugar(lugar) {
     this.btnLugarClick.emit(lugar);

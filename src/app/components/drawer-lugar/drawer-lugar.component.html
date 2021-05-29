@@ -1,19 +1,23 @@
 <div class="drawer-categoria" #drawerLugar>
 
   <div class="ion-text-center floating-info-button">
-    <ion-button size="small" shape="round" color="blanco" class="button-info" [disabled]="!lugar.telefono">
+    <ion-button size="small" shape="round" color="blanco" class="button-info" [disabled]="!lugar.telefono" (click)="llamar()">
       <ion-icon slot="start" name="call-outline"></ion-icon>
       Llamar
     </ion-button>
 
-    <ion-button size="small" shape="round" color="blanco" class="button-info" [disabled]="!lugar.sitio_web">
+    <ion-button size="small" shape="round" color="blanco" class="button-info" [disabled]="!lugar.sitio_web" (click)="abrirWeb()">
       <ion-icon slot="start" name="globe-outline"></ion-icon>
       Web
     </ion-button>
 
-    <ion-button size="small" shape="round" color="blanco" class="button-info" [disabled]="!lugar.email">
+    <ion-button size="small" shape="round" color="blanco" class="button-info" [disabled]="!lugar.email" (click)="email()">
       <ion-icon slot="start" name="mail-outline"></ion-icon>
       Email
+    </ion-button>
+    <ion-button size="small" shape="round" color="blanco" class="button-info" (click)="comoLlegar()">
+      <ion-icon slot="start" name="navigate-outline"></ion-icon>
+      Cómo llegar
     </ion-button>
   </div>
 

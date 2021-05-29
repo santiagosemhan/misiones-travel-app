@@ -153,4 +153,22 @@ export class DrawerLugarComponent implements OnInit {
     drawerLugar.style.transform = '';
     this.btnClick.emit(imagen);
   }
+
+  abrirWeb() {
+    window.open(this.lugar.sitio_web, '_system');
+  }
+  email() {    
+    window.open(`mailto:${this.lugar.email}`, '_system');
+  }
+  llamar() {
+    window.open(`tel:${this.lugar.telefono}`, '_system');
+  }
+  comoLlegar() {
+    if (this.platform.is('android')) {
+      window.location.href = `geo:${this.lugar.geoposicion.latitud},${this.lugar.geoposicion.longitud}`;
+    } else {
+      window.location.href = `maps://maps.apple.com/?q=${this.lugar.geoposicion.latitud},${this.lugar.geoposicion.longitud}`;
+      // window.open('geo://'+this.lugar.geoposicion.latitud+', '+this.lugar.geoposicion.longitude+'?q='+query,+'_system');
+    }
+  }
 }

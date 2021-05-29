@@ -20,15 +20,15 @@
     </ion-slides>
   </div>
 
-  <div class="slide-categorias" *ngIf="!lugares && !loading">
+  <div class="slide-categorias" *ngIf="categorias && !lugares && !loading">
     <ion-slides pager="false" [options]="slideOpts">
       <ion-slide>
         <div class="app-buttons">
           <ion-col size="4">
-            <ion-button size="large" [color]="categoria">
+            <ion-button size="large" [color]="categoriaPrincipal">
               <div>
                 <ion-icon slot="start" [src]="'assets/icon/icon_'+categoriaPrincipal+'.svg'"></ion-icon>
-                <strong>{{ currentCategoria.nombre }}</strong>
+                <strong *ngIf="objCategoriaPrincipal">{{ objCategoriaPrincipal.nombre }}</strong>
               </div>
             </ion-button>
           </ion-col>
@@ -47,20 +47,7 @@
     </ion-slides>
   </div>
 
-  <div class="slide-categorias" *ngIf="lugares && loading">
-    <ion-slides pager="false" [options]="slideOpts">
-      <ion-slide *ngFor="let item of arrayOne(8);">
-        <ion-thumbnail>
-          <ion-skeleton-text animated></ion-skeleton-text>
-          <ion-label>
-            <ion-skeleton-text animated></ion-skeleton-text>
-          </ion-label>
-        </ion-thumbnail>
-      </ion-slide>
-    </ion-slides>
-  </div>
-
-  <div class="slide-categorias" *ngIf="lugares && !loading">
+  <div class="slide-categorias" *ngIf="lugares && !categorias && !loading">
     <ion-slides pager="false" [options]="slideOpts">
       <ion-slide>
         <div class="app-buttons">
@@ -68,8 +55,7 @@
             <ion-button size="large" [color]="categoriaPrincipal">
               <div>
                 <ion-icon slot="start" [src]="'assets/icon/icon_'+categoriaPrincipal+'.svg'"></ion-icon>
-                <strong *ngIf="!loading">{{ lugares?.categoria?.nombre }}</strong>
-                <ion-skeleton-text animated *ngIf="loading"></ion-skeleton-text>
+                <strong>{{ objCategoriaPrincipal.nombre }}</strong>
               </div>
             </ion-button>
           </ion-col>
@@ -90,27 +76,16 @@
     </ion-slides>
   </div>
 
-  <div class="slide-categorias" *ngIf="hoja">
-    <ion-slides pager="false" [options]="slideOpts">
-      <ion-slide *ngFor="let imagenes of hoja.imagenes">
-        <ion-thumbnail>
-          <img [src]="imagenes.formats.thumbnail.url">
-
-        </ion-thumbnail>
-      </ion-slide>
-    </ion-slides>
-  </div>
-
-  <div class="descripcion ion-padding" *ngIf="!subCategoria">
-    <label *ngIf="hoja">{{padre.categoria.nombre}}/{{padre.nombre}}</label>
-    <h1 *ngIf="currentCategoria"><strong>{{ currentCategoria.nombre }}</strong></h1>
-    <p *ngIf="currentCategoria">
+  <div class="descripcion ion-padding" *ngIf="currentCategoria && !subCategoria">
+    <!-- <label *ngIf="categoriaPrincipal">{{categoriaPrincipal}}/{{padre.nombre}}</label> -->
+    <h1><strong>{{ currentCategoria.nombre }}</strong></h1>
+    <p>
       {{ currentCategoria.descripcion }}
     </p>
   </div>
 
   <div class="descripcion ion-padding" *ngIf="subCategoria">
-    <label *ngIf="hoja">{{padre.categoria.nombre}}/{{padre.nombre}}</label>
+    <label *ngIf="hoja">{{categoriaPrincipal}}/{{subCategoria.nombre}}</label>
     <h1><strong>{{ subCategoria.nombre }}</strong></h1>
     <p>
       {{ subCategoria.descripcion }}

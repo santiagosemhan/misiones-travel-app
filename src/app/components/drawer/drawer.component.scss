@@ -30,6 +30,30 @@
     padding-left: 1rem;
     padding-right: 1rem;
 
+    .imperdible {
+        --background: linear-gradient(#f1f62c, #008d36);
+    }
+
+    .atraccion {
+        --background: linear-gradient(#00edff, #364dff);
+    }
+
+    .circuito {
+        --background: linear-gradient(#ffd635, #ff9747);
+    }
+
+    .alojamiento {
+        --background: linear-gradient(#3fe1ff, #5700db);
+    }
+
+    .gastronomia {
+        --background: linear-gradient(#f32881, #8838f1);
+    }
+
+    .eventos {
+        --background: linear-gradient(#5adcbf, #2a9594);
+    }
+
     ion-button {
         height: 6rem;
         width: 6rem;

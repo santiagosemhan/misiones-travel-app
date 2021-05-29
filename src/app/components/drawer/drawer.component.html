@@ -9,7 +9,7 @@
 
   <ion-row class="app-buttons">
     <ion-col size="4">
-      <ion-button size="large" color="imperdible" (click)="btnCategoria('imperdibles')">
+      <ion-button size="large" class="imperdible" (click)="btnCategoria('imperdibles')">
         <div>
           <ion-icon slot="start" src="assets/icon/icon_imperdibles.svg"></ion-icon>
           <strong>{{ 'HOME.imperdibles' | translate }}</strong>
@@ -17,7 +17,7 @@
       </ion-button>
     </ion-col>
     <ion-col size="4">
-      <ion-button size="large" color="atraccion" (click)="btnCategoria('atracciones')">
+      <ion-button size="large" class="atraccion" (click)="btnCategoria('atracciones')">
         <div>
           <ion-icon slot="start" src="assets/icon/icon_atracciones.svg"></ion-icon>
           <strong>{{ 'HOME.atracciones' | translate }}</strong>
@@ -25,7 +25,7 @@
       </ion-button>
     </ion-col>
     <ion-col size="4">
-      <ion-button size="large" color="circuito" (click)="btnCategoria('circuito')">
+      <ion-button size="large" class="circuito" (click)="btnCategoria('circuito')">
         <div>
           <ion-icon slot="start" src="assets/icon/icon_circuitos.svg"></ion-icon>
           <strong>{{ 'HOME.circuitos' | translate }}</strong>
@@ -35,7 +35,7 @@
   </ion-row>
   <ion-row class="app-buttons">
     <ion-col size="4">
-      <ion-button size="large" color="alojamiento" [disabled]="true" (click)="btnCategoria('alojamientos')">
+      <ion-button size="large" class="alojamiento" (click)="btnAlojamiento()">
         <div>
           <ion-icon slot="start" src="assets/icon/icon_alojamiento.svg"></ion-icon>
           <strong>{{ 'HOME.alojamiento' | translate }}</strong>
@@ -44,7 +44,7 @@
     </ion-col>
     <ion-col size="4">
       <!-- <ion-button size="large" color="gastronomia" [disabled]="isCategoriaDisabled('gastronomia')" -->
-      <ion-button size="large" color="gastronomia" [disabled]="true" (click)="btnCategoria('gastronomia')">
+      <ion-button size="large" class="gastronomia" [disabled]="true" (click)="btnCategoria('gastronomia')">
         <div>
           <ion-icon slot="start" src="assets/icon/icon_gastronomia.svg"></ion-icon>
           <strong>{{ 'HOME.gastronomia' | translate }}</strong>
@@ -52,7 +52,7 @@
       </ion-button>
     </ion-col>
     <ion-col size="4">
-      <ion-button size="large" color="eventos" (click)="goTo('/eventos')">
+      <ion-button size="large" class="eventos" (click)="goTo('/eventos')">
         <div>
           <ion-icon slot="start" src="assets/icon/icon_cupones.svg"></ion-icon>
           <strong>{{ 'HOME.cupones' | translate }}</strong>

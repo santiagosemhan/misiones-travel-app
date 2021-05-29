@@ -1,4 +1,4 @@
-import { stackRouteDrawer } from './../_globals/globals';
+import { stackRouteDrawer, stackRouteDw, mainCategory } from './../_globals/globals';
 import { MsgService } from './../_services/msg.service';
 import { ApiService } from './../_services/api.service';
 import { MapboxService } from './../_services/mapbox.service';
@@ -7,6 +7,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -50,7 +51,7 @@ export class HomePage implements OnInit {
 
     this.msgService.presentLoading('Cargando...')
 
-    this.loadCategorias();
+    this.loadLugares();
 
   }
 
@@ -67,8 +68,7 @@ export class HomePage implements OnInit {
           let coordinates = `${resp.coords.latitude},${resp.coords.longitude}`
           this.coordinates.latitud = resp.coords.latitude
           this.coordinates.longitud = resp.coords.longitude
-          // this.load5Near(coordinates);
-          // this.loadPrincipales();
+          // this.loadNears(coordinates);          
           resolve('resolved');
 
         }).catch((error) => {
@@ -80,70 +80,35 @@ export class HomePage implements OnInit {
     });
   }
 
-  async loadCategorias() {
+  async loadLugares() {
     const reslt = await this.initMap();
 
-    let params = {
-      // 'activo': true
-      '_limit': 10
+    let limit = 25;
+    let paramsImerpdibles = {
+      'slug': 'imperdibles',
+    }
+    let paramsAtracciones = {
+      'slug': 'atracciones'
     }
 
-    await this.apiService.get('categorias', params).subscribe(
-      (categorias: any) => {
-        this.categorias = categorias
-        console.log('categorias', categorias)
-        this.msgService.dismissLoading()
-        this.loading = false;
+    forkJoin({
+      imperdibles: this.apiService.get(`categorias?slug_in=imperdibles`),
+      atracciones: this.apiService.get(`categorias?slug_in=atracciones&slug_in=atracciones-camping&slug_in=atracciones-mirador-punto-panoramico`),
+    }).subscribe((arrData) => {
+      // console.log('arrData', arrData)
+      this.msgService.dismissLoading()
+      this.loading = false;
 
-        this.loadPrincipales();
+      let geoJson = {
+        type: 'FeatureCollection',
+        features: []
+      };
 
-      });
-
-  }
-
-  loadPrincipales() {
-    // let categorias = this.categorias;
-    let geoJson = {
-      type: 'FeatureCollection',
-      features: []
-    };
-
-    let imperdibles = 1;
-    let atracciones = 1;
-
-    this.categorias.forEach(categoria => {
-
-      // console.log('forEach', categoria.slug)
-      if (categoria.slug == "imperdibles") {
-        // if (imperdibles <= 15) {
+      let cantAtracciones = 0;
+      let atracciones: any = arrData.atracciones;
+      atracciones.forEach(categoria => {
         categoria.lugares.forEach(lugar => {
-          if (lugar.location && imperdibles <= 15) {
-            geoJson.features.push(
-              {
-                "type": "Feature",
-                "geometry": lugar.location,
-                "properties": {
-                  "title": lugar.nombre,
-                  "id": lugar.id,
-                  "icon": {
-                    "iconUrl": `/assets/pins/pin_imperdibles.svg`,
-                    "iconSize": [30, 30], // size of the icon
-                    "iconAnchor": [25, 25], // point of the icon which will correspond to marker's location
-                    "popupAnchor": [0, -25], // point from which the popup should open relative to the iconAnchor
-                    "className": "dot"
-                  }
-                }
-              }
-            )
-            imperdibles++;
-          }
-        });
-        // }
-      }
-      if (categoria.slug == 'atracciones') {
-
-        categoria.lugares.forEach(lugar => {
-          if (lugar.location && atracciones <= 15) {
+          if (lugar.location && cantAtracciones <= limit) {
             geoJson.features.push(
               {
                 "type": "Feature",
@@ -161,37 +126,116 @@ export class HomePage implements OnInit {
                 }
               }
             )
-            atracciones++;
+            cantAtracciones++;
           }
         });
+      });
 
-      }
+      let cantImperdibles = 0;
+      let imperdibles: any = arrData.imperdibles;
+      imperdibles.forEach(categoria => {
+        categoria.lugares.forEach(lugar => {
+          if (lugar.location && cantImperdibles <= limit) {
+            geoJson.features.push(
+              {
+                "type": "Feature",
+                "geometry": lugar.location,
+                "properties": {
+                  "title": lugar.nombre,
+                  "id": lugar.id,
+                  "icon": {
+                    "iconUrl": `/assets/pins/pin_imperdibles.svg`,
+                    "iconSize": [30, 30], // size of the icon
+                    "iconAnchor": [25, 25], // point of the icon which will correspond to marker's location
+                    "popupAnchor": [0, -25], // point from which the popup should open relative to the iconAnchor
+                    "className": "dot"
+                  }
+                }
+              }
+            )
+            cantImperdibles++;
+          }
+        });
+      });
+
+
+      this.mapBoxService.drawPrincipales('map', this.coordinates.latitud, this.coordinates.longitud, geoJson, (id) => { this.goToLugar(id) })
+
+
     });
 
-    this.mapBoxService.drawPrincipales('map', this.coordinates.latitud, this.coordinates.longitud, geoJson, (id) => { this.goToLugar(id) })
   }
 
-  load5Near(coordinates) {
+  loadNears(coordinates, categoria?) {
 
     // let where = [
     //   { 'relevancia': { '$in': 'muy_alta' } },
     //   { 'relevancia': { '$in': 'alta' } }
     // ]
-
-    let where = 'where[][relevancia][$in]=muy_alta&where[][relevancia][$in]=alta';
-
-    let params = {
-      coordinates: coordinates,
-      maxDistance: 5000000,
-      limit: 5,
+    let paramsCat = {
+      'slug': categoria
     }
+    this.apiService.get(`categorias`, paramsCat).subscribe((respCat: any) => {
 
-    this.apiService.get(`lugares/near?${where}`, params).subscribe(
-      (lugares) => {
-        // this.lugares = lugares
-        console.log('lugares/near', lugares)
-        this.msgService.dismissLoading()
-      });
+      let where = '';
+
+      respCat[0].sub_categorias.map((data) => {
+        where += `&where[][categorias][$in]=${data.id}`;
+      })
+
+      let params = {
+        coordinates: coordinates,
+        // maxDistance: 5000000,
+        maxDistance: 30000,
+        // limit: 15,
+      }
+
+      this.apiService.get(`lugares/near?${where}`, params).subscribe(
+        (lugares: any) => {
+          // this.lugares = lugares
+          console.log('lugares/near', lugares)
+          // this.msgService.dismissLoading()
+
+          // add markers
+
+          let geoJson = {
+            type: 'FeatureCollection',
+            features: []
+          };
+
+          lugares.forEach((lugar) => {
+
+            if (lugar.location) {
+              geoJson.features.push(
+                {
+                  "type": "Feature",
+                  "geometry": lugar.location,
+                  "properties": {
+                    "title": lugar.nombre,
+                    "id": lugar.id,
+                    "icon": {
+                      "iconUrl": `/assets/pins/pin_${categoria}.svg`,
+                      "iconSize": [30, 30], // size of the icon
+                      "iconAnchor": [25, 25], // point of the icon which will correspond to marker's location
+                      "popupAnchor": [0, -25], // point from which the popup should open relative to the iconAnchor
+                      "className": "dot"
+                    }
+                  }
+                }
+              )
+            }
+
+          });
+
+          this.loading = false;
+
+          console.log('loadNears', geoJson)
+
+          this.mapBoxService.updateLayer('map', this.coordinates.latitud, this.coordinates.longitud, 12, geoJson, (id) => { this.goToLugar(id) })
+
+        });
+
+    })
   }
 
   toggleBackdrop(isVisible) {
@@ -200,14 +244,19 @@ export class HomePage implements OnInit {
   }
 
   openCategoria(categoria) {
+    mainCategory.splice(0, mainCategory.length);
+    mainCategory.push(categoria);
+    // stackRouteDw.next(categoria);
+    stackRouteDrawer.push(categoria);
     this.showDrawerPrincipal = false;
     this.categoriaSelected = categoria;
 
     // empty array
-    stackRouteDrawer.splice(0, stackRouteDrawer.length);
-    stackRouteDrawer.push(categoria);
+    // mainCategory.splice(0, mainCategory.length);
 
-    console.log('stackRouteDrawer', stackRouteDrawer)
+    let coordinates = `${this.coordinates.longitud},${this.coordinates.latitud}`
+    // let coordinates = `${this.coordinates.latitud},${this.coordinates.longitud}`
+    this.loadNears(coordinates, categoria);
 
     if (categoria == 'circuito') {
       this.showCircuitos = true;
@@ -248,8 +297,6 @@ export class HomePage implements OnInit {
     }
     item.lugares.forEach((lugar) => {
 
-      // console.log('lugar cat princ', lugar, this.categoriaPrincipal)
-
       geoJson.features.push(
         {
           "type": "Feature",
@@ -287,17 +334,17 @@ export class HomePage implements OnInit {
   }
 
   backCategoria() {
-    // console.log('backCategoria()', this.backButton)
+
     stackRouteDrawer.pop()
-    console.log('stackRouteDrawer', stackRouteDrawer)
 
     if (stackRouteDrawer.length > 0) {
       console.log('back')
       if (stackRouteDrawer.length == 1) {
         this.categoriaSelected = stackRouteDrawer[0];
-
+        stackRouteDw.next(stackRouteDrawer);
       } else {
         this.categoriaSelected = stackRouteDrawer[stackRouteDrawer.length - 1];
+        stackRouteDw.next(stackRouteDrawer);
       }
 
     } else {

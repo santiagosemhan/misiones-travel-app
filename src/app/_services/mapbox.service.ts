@@ -119,15 +119,16 @@ export class MapboxService {
       zoom: zoom
     });
 
+    // remove all markers
     document.querySelectorAll('.marker').forEach(function (a) {
       a.remove()
     })
+
     if (map.getSource('route')) {
       if (map.getLayer('route')) {
         map.removeLayer('route');
         map.removeSource('route');
       }
-
     }
 
     geoJson.features.forEach(function (marker) {
@@ -167,10 +168,7 @@ export class MapboxService {
           }
         )
           // .setText(marker.properties.title)
-          .setDOMContent(elementPopup)
-          ;
-
-
+          .setDOMContent(elementPopup);
 
         // add marker to map
         new mapboxgl.Marker(el)
