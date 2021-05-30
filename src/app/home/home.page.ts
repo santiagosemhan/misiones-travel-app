@@ -36,6 +36,7 @@ export class HomePage implements OnInit {
   };
   backButton = null;
   loading = false;
+  dragendEventAttach = false;
 
   constructor(public modalController: ModalController,
     private changeDetectorRef: ChangeDetectorRef,
@@ -68,7 +69,6 @@ export class HomePage implements OnInit {
           // let coordinates = `${resp.coords.latitude},${resp.coords.longitude}`
           this.coordinates.latitud = resp.coords.latitude
           this.coordinates.longitud = resp.coords.longitude
-          // this.loadNears(coordinates);          
           resolve('resolved');
 
         }).catch((error) => {
@@ -173,7 +173,7 @@ export class HomePage implements OnInit {
 
   }
 
-  loadNears(coordinates, categoria?) {
+  loadNears(coordinates, categoria?, center = true) {
 
     // let where = [
     //   { 'relevancia': { '$in': 'muy_alta' } },
@@ -236,10 +236,19 @@ export class HomePage implements OnInit {
 
           this.loading = false;
 
-          console.log('loadNears', geoJson)
+          if (center) {
+            this.mapBoxService.updateLayer('map', this.coordinates.latitud, this.coordinates.longitud, 12, geoJson, (id) => { this.goToLugar(id) })
+          } else {
+            this.mapBoxService.updateLayerNoCenter(12, geoJson, (id) => { this.goToLugar(id) })
+          }
 
-          this.mapBoxService.updateLayer('map', this.coordinates.latitud, this.coordinates.longitud, 12, geoJson, (id) => { this.goToLugar(id) })
-
+          if (!this.dragendEventAttach) {
+            this.mapa.on('dragend', function () {
+              let coordinates = `${this.mapa.getCenter().lng},${this.mapa.getCenter().lat}`
+              this.loadNears(coordinates, this.categoriaSelected, false)
+            }.bind(this, categoria));
+            this.dragendEventAttach = true;
+          }
         });
 
     })
@@ -257,6 +266,7 @@ export class HomePage implements OnInit {
     stackRouteDrawer.push(categoria);
     this.showDrawerPrincipal = false;
     this.categoriaSelected = categoria;
+    // this.dragendEventAttach = false;
 
     // empty array
     // mainCategory.splice(0, mainCategory.length);

@@ -1,4 +1,4 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <plugin name="GPS_REQUIRED" value="false"></plugin>
+    <!-- <plugin name="GPS_REQUIRED">false</plugin> -->
 </resources>

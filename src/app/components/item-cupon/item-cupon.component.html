@@ -1,0 +1,24 @@
+<div class="content-cupon">
+  <ion-chip class="chip-blanco">
+    <ion-label>{{ evento.fecha| dfnsParseIso | dfnsFormat: 'dd/MM/yyyy'}}</ion-label>
+  </ion-chip>
+  <div class="cupon" [style.background]="background">
+    <ion-row>
+      <ion-col class="cupon-descripcion" size="8">
+        <h3>{{evento.nombre}}</h3>
+        <h4><strong>{{evento.lugar?.nombre}}</strong></h4>
+        <ion-label class="evento-falta"> Dentro de {{ evento.fecha | dfnsParseIso | dfnsFormatDistanceToNow }}
+        </ion-label>
+      </ion-col>
+      <ion-col class="cupon-imagen" size="4">
+  
+        <img class="cropped" [src]="evento.imagen.formats.thumbnail.url" />
+  
+      </ion-col>
+    </ion-row>
+    <div class="top left"></div>
+    <!-- <div class="top right"></div> -->
+    <div class="bottom left"></div>
+    <!-- <div class="bottom right"></div> -->
+  </div>
+</div>

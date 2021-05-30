@@ -14,12 +14,14 @@ import { formatDistance, subDays, format, parseISO } from 'date-fns'
 export class EventosPage implements OnInit {
 
   // faltan;
-  eventos;
+  eventos = null;
   options = {
     locale: 'es',
     addSuffix: true
   };
   loading = false;
+  searchText = '';
+  isoDateString = new Date().toISOString();
 
   constructor(private apiService: ApiService,
     private msgService: MsgService) { }
@@ -36,24 +38,28 @@ export class EventosPage implements OnInit {
 
   loadEventos($event?) {
 
-    let isoDateString = new Date().toISOString();
-
     let params = {
       'activo_eq': 'true',
-      'fecha_gte': isoDateString
+      'fecha_gte': this.isoDateString
     }
-    this.apiService.get('eventos', params).subscribe((eventos) => {
+    this.apiService.get('eventos', params).subscribe(
+      (eventos) => {
 
-      this.eventos = eventos;
+        this.eventos = eventos;
 
-      if ($event) {
-        $event.target.complete();
-      }
+        if ($event) {
+          $event.target.complete();
+        }
 
-      this.msgService.dismissLoading();
-      this.loading = false;
+        this.msgService.dismissLoading();
+        this.loading = false;
 
-    })
+      },
+      (error) => {
+        console.error(error)
+        this.msgService.dismissLoading();
+        this.loading = false;
+      })
   }
 
   openEvento(evento) {
@@ -64,6 +70,35 @@ export class EventosPage implements OnInit {
     this.msgService.presentLoading('Cargando Eventos...');
     this.loading = true;
     this.loadEventos($event)
+  }
+
+  buscar() {
+    console.log(this.searchText)
+
+    if (this.searchText !== '') {
+
+      this.msgService.presentLoading('Bsucando Eventos...');
+
+      let params = {
+        'activo_eq': 'true',
+        'fecha_gte': this.isoDateString,
+        'nombre_contains': this.searchText
+      }
+      this.apiService.get('eventos', params).subscribe(
+        (eventos) => {
+
+          this.eventos = eventos;
+
+          this.msgService.dismissLoading();
+          this.loading = false;
+
+        },
+        (error) => {
+          console.error(error)
+          this.msgService.dismissLoading();
+          this.loading = false;
+        })
+    }
   }
 
 }

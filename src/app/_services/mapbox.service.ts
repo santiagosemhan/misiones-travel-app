@@ -181,6 +181,72 @@ export class MapboxService {
 
   }
 
+  updateLayerNoCenter(zoom = 12, geoJson, callback) {
+  
+    let map = this.mapa
+
+    // // remove all markers
+    // document.querySelectorAll('.marker').forEach(function (a) {
+    //   a.remove()
+    // })
+
+    if (map.getSource('route')) {
+      if (map.getLayer('route')) {
+        map.removeLayer('route');
+        map.removeSource('route');
+      }
+    }
+
+    geoJson.features.forEach(function (marker) {
+      // console.log('marker', marker)
+      if (marker.geometry) {
+        // create a DOM element for the marker
+        let el = document.createElement('div');
+        el.className = 'marker';
+        el.style.backgroundImage = `url(${marker.properties.icon.iconUrl})`
+        el.style.width = marker.properties.icon.iconSize[0] + 'px';
+        el.style.height = marker.properties.icon.iconSize[1] + 'px';
+        el.style.backgroundRepeat = 'no-repeat';
+
+        el.addEventListener('click', function () {
+          // goto atraccion
+          // window.alert(marker.properties.title);
+          // callback(marker.properties.id)
+          map.flyTo({
+            center: marker.geometry.coordinates,
+            zoom: 16
+          });
+        });
+
+        let elementPopup = document.createElement('div');
+        elementPopup.append(`${marker.properties.title}`)
+
+        elementPopup.addEventListener('click', function () {
+          // goto atraccion
+          // window.alert(marker.properties.title);
+          callback(marker.properties.id)
+        });
+
+        let popup = new mapboxgl.Popup(
+          {
+            offset: 25,
+            className: 'popup-marker'
+          }
+        )
+          // .setText(marker.properties.title)
+          .setDOMContent(elementPopup);
+
+        // add marker to map
+        new mapboxgl.Marker(el)
+          .setLngLat(marker.geometry.coordinates)
+          .setPopup(popup)
+          .addTo(map);
+      }
+
+    });
+
+  }
+
   drawPrincipales(elementId, lat = -27.3773499, lng = -55.8801476, geoJson, callback) {
     // console.log('geoJson', geoJson, this.mapa)
 

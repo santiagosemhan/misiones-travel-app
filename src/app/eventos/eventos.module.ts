@@ -1,3 +1,5 @@
+import { SharedComponentsModule } from './../components/shared-components.module';
+import { TranslateModule } from '@ngx-translate/core';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -18,7 +20,9 @@ import { DateFnsModule, FormatDistanceToNowPipeModule, ParseIsoPipeModule, Parse
     DateFnsModule,
     ParsePipeModule,
     ParseIsoPipeModule,
-    FormatDistanceToNowPipeModule
+    FormatDistanceToNowPipeModule,
+    TranslateModule,
+    SharedComponentsModule
   ],
   declarations: [EventosPage]
 })

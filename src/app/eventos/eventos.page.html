@@ -1,22 +1,25 @@
 <ion-header class="ion-no-border">
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-menu-button autoHide="false"></ion-menu-button>
+      <!-- <ion-menu-button autoHide="false"></ion-menu-button> -->
+      <ion-back-button defaultHref="/home" [text]="'COMMON.BACK' | translate"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content color="primary">
-  <h1 class="ion-padding-start"><strong>Eventos en Misiones</strong></h1>
-  <!-- <ion-searchbar placeholder="" animated></ion-searchbar> -->
+  <div slot="fixed" class="div-fixed">
+    <h1 class="ion-padding-start"><strong>Eventos en Misiones</strong></h1>
+    <!-- <ion-searchbar placeholder="" animated></ion-searchbar> -->
 
-  <ion-item class="search">
-    <ion-input type="text" placeholder=""></ion-input>
-    <ion-button shape="round" color="secondary" slot="end">
-      <ion-icon slot="icon-only" color="blanco" name="arrow-forward-outline"></ion-icon>
-    </ion-button>
-  </ion-item>
+    <ion-item class="search" lines="none">
+      <ion-button shape="round" color="secondary" slot="end" (click)="buscar()" [disabled]="searchText ==''">
+        <ion-icon slot="icon-only" color="blanco" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+      <ion-input [(ngModel)]="searchText" type="text" placeholder=""></ion-input>
+    </ion-item>
 
+  </div>
 
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Estira para actualizar"
@@ -26,66 +29,18 @@
 
   <ion-list lines="none" *ngIf="!loading">
 
-    <div class="cupon" *ngFor="let evento of eventos" [style.background]="evento.categoria_evento.color"
-      (click)="openEvento(evento)">
-
-      <ion-chip class="chip-blanco">
-        <ion-label>{{ evento.fecha| dfnsParseIso | dfnsFormat: 'dd/MM/yyyy'}}</ion-label>
-      </ion-chip>
-      <ion-row>
-        <ion-col class="cupon-descripcion" size="8">
-          <h3>{{evento.nombre}}</h3>
-          <h4><strong>{{evento.lugar.nombre}}</strong></h4>
-          <ion-label class="evento-falta"> Dentro de {{ evento.fecha | dfnsParseIso | dfnsFormatDistanceToNow }}
-          </ion-label>
-        </ion-col>
-        <ion-col class="cupon-imagen" size="4">
-
-          <img [src]="evento.imagen.formats.thumbnail.url" />
-
-        </ion-col>
-      </ion-row>
-      <div class="top left"></div>
-      <!-- <div class="top right"></div> -->
-      <div class="bottom left"></div>
-      <!-- <div class="bottom right"></div> -->
-    </div>
+    <mt-item-cupon *ngFor="let evento of eventos" [evento]="evento"
+      [background]="evento.categoria_evento?evento.categoria_evento.color:''" (click)="openEvento(evento)">
+    </mt-item-cupon>
 
   </ion-list>
 
-  <div *ngIf="loading">
-
-    <div class="cupon" [style.background]="'#c3e1c9'">
-
-      <ion-chip class="chip-blanco">
-        <ion-skeleton-text animated></ion-skeleton-text>
-      </ion-chip>
-      <ion-row>
-        <ion-col class="cupon-descripcion" size="8">
-          <h3>
-            <ion-skeleton-text animated></ion-skeleton-text>
-          </h3>
-          <h4><strong>
-              <ion-skeleton-text animated></ion-skeleton-text>
-            </strong></h4>
-          <ion-label class="evento-falta">
-            <ion-skeleton-text animated></ion-skeleton-text>
-          </ion-label>
-        </ion-col>
-        <ion-col class="cupon-imagen" size="4">
-
-          <ion-thumbnail slot="start">
-            <ion-skeleton-text></ion-skeleton-text>
-          </ion-thumbnail>
-
-        </ion-col>
-      </ion-row>
-      <div class="top left"></div>
-      <!-- <div class="top right"></div> -->
-      <div class="bottom left"></div>
-      <!-- <div class="bottom right"></div> -->
-    </div>
-  </div>
-
+  <ion-row *ngIf="eventos && eventos.length<=0">
+    <ion-col>
+      <p class="ion-text-center">
+        No se encontraron eventos
+      </p>
+    </ion-col>
+  </ion-row>
 
 </ion-content>
