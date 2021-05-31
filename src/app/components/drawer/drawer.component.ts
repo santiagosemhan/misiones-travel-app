@@ -37,7 +37,7 @@ export class DrawerComponent implements AfterViewInit {
       },
       onMove: evt => {
         // console.log('onMove', evt)
-        if (evt.deltaY < -this.openHeight) {
+        if (evt.deltaY < this.openHeight) {
           return;
         }
         drawer.style.transform = `translateY(${evt.deltaY}px)`
@@ -46,13 +46,12 @@ export class DrawerComponent implements AfterViewInit {
       onEnd: evt => {
         // console.log('onEnd', evt)
         if (evt.deltaY < -30 && !this.isOpen) {
-          drawer.style.transition = '.4s ease-out';
+          drawer.style.transition = '.3s ease-out';
           drawer.style.transform = `translateY(${-this.openHeight}px)`;
           this.openState.emit(true);
           this.isOpen = true;
-        }
-        else if (evt.deltaY > 30 && this.isOpen) {
-          drawer.style.transition = '.4s ease-out';
+        } else if (evt.deltaY > 30 && this.isOpen) {
+          drawer.style.transition = '.3s ease-out';
           drawer.style.transform = '';
           this.openState.emit(false);
           this.isOpen = false;
@@ -68,13 +67,13 @@ export class DrawerComponent implements AfterViewInit {
 
     if (!this.isOpen) {
       drawer.style.transition = '.4s ease-out';
-      drawer.style.transform = '';
-      this.isOpen = false;
+      drawer.style.transform = `translateY(${-this.openHeight}px)`;
     } else {
       drawer.style.transition = '.4s ease-out';
-      drawer.style.transform = `translateY(${-this.openHeight}px)`;
-      this.isOpen = true;
+      drawer.style.transform = '';
     }
+
+    this.isOpen = !this.isOpen;
   }
 
   isCategoriaDisabled(categoria) {

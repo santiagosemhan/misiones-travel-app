@@ -40,32 +40,13 @@ export class DrawerCircuitosComponent implements OnInit {
 
   ngOnInit() {
 
-
-
     this.loadCircuitos()
+    
   }
 
   ngOnChanges(changes: SimpleChanges) {
 
     console.log(changes)
-    // You can also use categoryId.previousValue and 
-    // categoryId.firstChange for comparing old and new values
-
-    // if (changes.categoria.currentValue.lugares && changes.categoria.currentValue.lugares.length > 0) {
-    //   console.log('tiene lugares')
-    //   // this.lugares = changes.categoria.currentValue
-    //   // this.categorias = null;
-    //   // this.hoja = null;
-    // } else if (changes.categoria.currentValue.localidad) {
-    //   console.log('es lugar')
-    //   // this.lugares = null;
-    //   // this.categorias = null;
-    //   // this.hoja = changes.categoria.currentValue;
-    // }
-
-    // this.padre = changes.categoria.previousValue
-
-
 
   }
 

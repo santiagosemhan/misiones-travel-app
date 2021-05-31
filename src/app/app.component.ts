@@ -9,11 +9,6 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
-
-
-
-
 
 @Component({
   selector: 'app-root',
@@ -55,7 +50,7 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
-      this.splashScreen.hide();
+      // this.splashScreen.hide();
 
       this.deepLinkCheck()
 

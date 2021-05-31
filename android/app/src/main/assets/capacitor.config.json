@@ -5,9 +5,14 @@
   "npmClient": "npm",
   "webDir": "www",
   "plugins": {
-    "SplashScreen": {
-      "launchShowDuration": 0
-    }
   },
-  "cordova": {}
+  "cordova": {
+    "preferences": {      
+      "FadeSplashScreenDuration": "300",
+      "SplashShowOnlyFirstTime": "false",
+      "SplashScreen": "screen",
+      "SplashScreenDelay": "3000",
+      "ShowSplashScreenSpinner": false
+    }
+  }
 }

@@ -1,3 +1,4 @@
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { LugaresService } from './../_services/lugares.service';
 import { stackRouteDrawer, stackRouteDw, mainCategory } from './../_globals/globals';
 import { MsgService } from './../_services/msg.service';
@@ -8,7 +9,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 
 
 @Component({
@@ -40,6 +41,7 @@ export class HomePage implements OnInit {
   dragendEventAttach = false;
 
   constructor(public modalController: ModalController,
+    private splashScreen: SplashScreen,
     private changeDetectorRef: ChangeDetectorRef,
     private mapBoxService: MapboxService,
     private apiService: ApiService,
@@ -90,6 +92,7 @@ export class HomePage implements OnInit {
 
   async loadLugares() {
     const reslt = await this.initMap();
+    this.splashScreen.hide();
 
     let limit = 25;
     let paramsImerpdibles = {
