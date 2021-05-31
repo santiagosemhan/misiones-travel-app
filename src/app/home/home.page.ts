@@ -1,3 +1,4 @@
+import { LugaresService } from './../_services/lugares.service';
 import { stackRouteDrawer, stackRouteDw, mainCategory } from './../_globals/globals';
 import { MsgService } from './../_services/msg.service';
 import { ApiService } from './../_services/api.service';
@@ -44,14 +45,14 @@ export class HomePage implements OnInit {
     private apiService: ApiService,
     private router: Router,
     private geolocation: Geolocation,
-    private msgService: MsgService) {
+    private msgService: MsgService,
+    public lugaresService: LugaresService) {
 
   }
 
   ngOnInit() {
 
     this.msgService.presentLoading('Cargando...')
-
     this.loadLugares();
 
   }
@@ -369,51 +370,6 @@ export class HomePage implements OnInit {
       this.showDrawerPrincipal = true;
       this.showDrawerCategoria = false;
     }
-  }
-
-
-  autocompletMotivoDisplay(p) {
-    return p ? p.descripcion : '';
-  }
-
-  clearMotivo() {
-    // this.form.get('motivo').setValue('')
-  }
-
-  autocompleteMotivo() {
-    // let daap = this.session.daap;
-    // this.form.get('motivo').valueChanges
-    //   .pipe(
-    //     startWith(''),
-    //     debounceTime(500),
-    //     tap(() => {
-    //       // this.errorMsg = "";
-    //       this.motivos = [];
-    //       this.motivosLoading = true;
-    //     }),
-    //     switchMap(value => this.api.get("motivo_consulta/suggest", {
-    //       ...daap,
-    //       texto: value
-    //     })
-    //       .pipe(
-    //         finalize(() => {
-    //           this.motivosLoading = false
-    //         }),
-    //       )
-    //     )
-    //   )
-    //   .subscribe((data: any) => {
-    //     if (data['Search'] == undefined) {
-    //       // this.errorMsg = data['Error'];
-    //       this.motivos = [];
-    //     } else {
-    //       // this.errorMsg = "";
-    //       this.motivos = data['Search'];
-    //     }
-
-    //     this.motivos = data.data;
-
-    //   });
   }
 
   dibujarCircuito(circuito) {

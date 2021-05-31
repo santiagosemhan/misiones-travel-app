@@ -42,18 +42,6 @@ ion-content {
   // color: green;
 }
 
-.mat-field-full-width {
-  width: 70%;
-  // margin-top: 1rem;
-}
-
-// ion-searchbar {
-//   --border-radius: 1rem;
-//   --background: transparent;
-//   --box-shadow: 
-//   width: 70%;
-// }
-
 .marker {
   display: block;
   border: none;
@@ -79,4 +67,23 @@ ion-content {
 .fade-in {
   transition: 0.5s linear all;
   opacity: 1;
+}
+
+.search {
+  margin-top: 3rem;
+  background-color: transparent;
+  position: absolute;
+  z-index: 99;
+
+  margin-left: 1rem;
+
+  ion-searchbar {
+    --background: transparent;
+    // --border-radius: 2rem;
+  }
+
+  ion-auto-complete {
+    border-radius: 2rem;
+  }
+
 }

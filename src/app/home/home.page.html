@@ -5,37 +5,38 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<!-- <ion-header>
-  <ion-item lines="none" class="item-search">
-
-    <mat-form-field color="red" class="mat-field-full-width">
-      <input type="text" matInput [matAutocomplete]="auto">
-      <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearMotivo()">
-        <mat-icon>close</mat-icon>
-      </button>
-      <mat-autocomplete [displayWith]="autocompletMotivoDisplay" #auto="matAutocomplete">
-        <mat-option *ngIf="loadingLugares" class="is-loading">Espere...</mat-option>
-        <ng-container *ngIf="!loadingLugares">
-          <mat-option *ngFor="let p of lugares" [value]="p">
-            <span>{{p.descripcion}}</span>
-          </mat-option>
-        </ng-container>
-      </mat-autocomplete>
-    </mat-form-field>
-    </ion-item>
-</ion-header> -->
-
 <ion-content [fullscreen]="true" scrollY="false">
 
+
+  <div class="search">
+
+    <ng-template #suggestions let-attrs="attrs" class="suggestion-template">
+      <!-- <ion-item> -->
+      <!-- <ion-img class="flag" [slot]="'start'" [src]="attrs.data.flag"></ion-img> -->
+      <ion-icon name="pin-outline" slot="start" color="primary"></ion-icon>
+      <ion-label style="color: black;">
+        {{ attrs.data.nombre }}
+      </ion-label>
+      <!-- <ion-text >
+          <span [innerHtml]="attrs.data.name | boldprefix:attrs.keyword"></span> ({{ attrs.data.nativeName }})
+        </ion-text> -->
+      <!-- </ion-item> -->
+    </ng-template>
+
+    <ion-auto-complete [dataProvider]="lugaresService" [template]="suggestions" (itemSelected)="goToLugar($event.id)"
+      [styles]="{'searchbar': {'--border-radius': '2rem'}, 'list':{'width': '90%'}}"
+      [options]="{ placeholder : 'Buscar', color: 'blanco'}">
+    </ion-auto-complete>
+  </div>
 
   <div id="map" style="height: 100%; width: 100%;"></div>
 
   <app-drawer (openStateChanged)="toggleBackdrop($event)" (btnClick)="openCategoria($event)"
     (btnRoute)="goToPath($event)" *ngIf="showDrawerPrincipal"></app-drawer>
 
-  <mt-drawer-categoria (openStateChanged)="toggleBackdrop($event)" (btnLugarClick)="openLugar($event)"    
-    (redrawMap)="redrawMap($event)" [loading]="loading"
-    [categoria]="categoriaSelected" [categoriaPrincipal]="categoriaPrincipal" *ngIf="showDrawerCategoria">
+  <mt-drawer-categoria (openStateChanged)="toggleBackdrop($event)" (btnLugarClick)="openLugar($event)"
+    (redrawMap)="redrawMap($event)" [loading]="loading" [categoria]="categoriaSelected"
+    [categoriaPrincipal]="categoriaPrincipal" *ngIf="showDrawerCategoria">
   </mt-drawer-categoria>
 
   <mt-drawer-circuitos (openStateChanged)="toggleBackdrop($event)" (btnClick)="changeCircuito($event)"
