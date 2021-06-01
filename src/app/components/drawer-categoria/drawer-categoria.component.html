@@ -6,19 +6,8 @@
       </div>
     </ion-button>
   </div>
-
-  <div class="slide-categorias" *ngIf="loading">
-    <ion-slides pager="false" [options]="slideOpts">
-      <ion-slide *ngFor="let item of arrayOne(8);">
-        <ion-thumbnail>
-          <ion-skeleton-text animated></ion-skeleton-text>
-          <ion-label>
-            <ion-skeleton-text animated></ion-skeleton-text>
-          </ion-label>
-        </ion-thumbnail>
-      </ion-slide>
-    </ion-slides>
-  </div>
+ 
+  <mt-slide-button-loading *ngIf="loading" [slideOpts]="slideOpts"></mt-slide-button-loading>
 
   <div class="slide-categorias" *ngIf="categorias && !lugares && !loading">
     <ion-slides pager="false" [options]="slideOpts">

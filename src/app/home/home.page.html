@@ -22,7 +22,15 @@
       <!-- </ion-item> -->
     </ng-template>
 
-    <ion-auto-complete [dataProvider]="lugaresService" [template]="suggestions" (itemSelected)="goToLugar($event.id)"
+    <ng-template #emptyTemplate let-attrs="attrs">
+      <ion-label style="color: black;">
+        No encontramos ningun lugar
+      </ion-label>
+    </ng-template>
+
+    <ion-auto-complete [dataProvider]="lugaresService" 
+    [emptyTemplate]="emptyTemplate"    
+    [template]="suggestions" (itemSelected)="goToLugar($event.id)"
       [styles]="{'searchbar': {'--border-radius': '2rem'}, 'list':{'width': '90%'}}"
       [options]="{ placeholder : 'Buscar', color: 'blanco'}">
     </ion-auto-complete>

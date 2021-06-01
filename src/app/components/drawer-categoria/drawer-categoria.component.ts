@@ -146,10 +146,6 @@ export class DrawerCategoriaComponent implements AfterViewInit {
       });
   }
 
-  arrayOne(n: number): any[] {
-    return Array(n);
-  }
-
   async ngAfterViewInit() {
 
     const drawerCategoria = this.drawerCategoria.nativeElement;

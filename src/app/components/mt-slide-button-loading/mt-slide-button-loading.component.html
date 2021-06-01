@@ -1,0 +1,10 @@
+<ion-slides pager="false" [options]="slideOpts">
+  <ion-slide *ngFor="let item of arrayOne(8);">
+    <ion-thumbnail class="thumb-loading">
+      <ion-skeleton-text animated></ion-skeleton-text>
+      <ion-label>
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-label>
+    </ion-thumbnail>
+  </ion-slide>
+</ion-slides>

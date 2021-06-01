@@ -7,18 +7,7 @@
     </ion-button>
   </div>
 
-  <div class="slide-circuitos" *ngIf="loading">
-    <ion-slides pager="false" [options]="slideOpts">
-      <ion-slide *ngFor="let item of arrayOne(8);">
-        <ion-thumbnail>
-          <ion-skeleton-text animated></ion-skeleton-text>
-          <ion-label>
-            <ion-skeleton-text animated></ion-skeleton-text>
-          </ion-label>
-        </ion-thumbnail>
-      </ion-slide>
-    </ion-slides>
-  </div>
+  <mt-slide-button-loading *ngIf="loading" [slideOpts]="slideOpts"></mt-slide-button-loading>
 
   <div class="slide-circuitos" *ngIf="circuitos && !circuitoSelected && !loading">
     <ion-slides pager="false" [options]="slideOpts">
@@ -58,7 +47,7 @@
       <strong>Distancia:</strong> {{ circuitoSelected.distancia_total }} Kms<br>
       <strong>Terreno:</strong> {{circuitoSelected.terreno}}<br>
       <strong>Localidades:</strong> <span *ngFor="let localidad of localidades"> {{ localidad.nombre }} |</span> <br>
-      <strong>Difucultad:</strong> {{circuitoSelected.dificultad}}<br>
+      <strong>Dificultad:</strong> {{circuitoSelected.dificultad}}<br>
     </p>
     <p>
       {{circuitoSelected.descripcion}}

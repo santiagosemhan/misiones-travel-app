@@ -55,4 +55,13 @@ ion-toolbar {
   border-radius: 2rem;
 }
 
+ion-loading {
+  --spinner-color: var(--ion-color-primary);
+}
+
 @import "~ionic4-auto-complete/auto-complete";
+
+.loading input.searchbar-input {
+  background: white url('/assets/loading.gif') no-repeat right 4px center !important;
+  background-size: 25px 25px !important;
+}

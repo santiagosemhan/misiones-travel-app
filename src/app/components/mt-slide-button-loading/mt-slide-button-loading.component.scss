@@ -1,0 +1,40 @@
+ion-slides {
+    padding-top: 0;
+
+    .swiper-slide {
+        font-size: 14px;
+        margin-right: -1rem;
+    }
+}
+
+.thumb-loading {
+    height: 7rem;
+
+    ion-skeleton-text {
+        height: 5rem;
+    }
+
+    ion-label {
+        ion-skeleton-text {
+            margin-top: 1rem;
+            height: 2rem;
+        }
+    }
+}
+
+ion-thumbnail {
+    --border-radius: 0.3rem;
+    --size: 130px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    img {
+        width: 80px;
+        height: 80px;
+        overflow: hidden;
+    }
+
+    ion-label {
+        text-overflow: ellipsis;
+    }
+}

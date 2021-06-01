@@ -41,7 +41,7 @@ export class DrawerCircuitosComponent implements OnInit {
   ngOnInit() {
 
     this.loadCircuitos()
-    
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -63,14 +63,6 @@ export class DrawerCircuitosComponent implements OnInit {
         this.loading = false;
       });
   }
-
-
-
-  arrayOne(n: number): any[] {
-    return Array(n);
-  }
-
-
 
   async ngAfterViewInit() {
 

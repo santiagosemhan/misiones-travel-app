@@ -1,3 +1,4 @@
+import { MtSlideButtonLoadingComponent } from './mt-slide-button-loading/mt-slide-button-loading.component';
 import { ItemCuponComponent } from './item-cupon/item-cupon.component';
 import { DrawerCircuitosComponent } from './drawer-circuitos/drawer-circuitos.component';
 import { DrawerLugarComponent } from './drawer-lugar/drawer-lugar.component';
@@ -17,7 +18,8 @@ import { DateFnsModule, FormatDistanceToNowPipeModule, ParseIsoPipeModule, Parse
     DrawerCategoriaComponent,
     DrawerLugarComponent,
     DrawerCircuitosComponent,
-    ItemCuponComponent
+    ItemCuponComponent,
+    MtSlideButtonLoadingComponent
   ],
   imports: [
     CommonModule,
@@ -33,7 +35,8 @@ import { DateFnsModule, FormatDistanceToNowPipeModule, ParseIsoPipeModule, Parse
     DrawerCategoriaComponent,
     DrawerLugarComponent,
     DrawerCircuitosComponent,
-    ItemCuponComponent
+    ItemCuponComponent,
+    MtSlideButtonLoadingComponent
   ]
 })
 export class SharedComponentsModule { }
