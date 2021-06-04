@@ -135,7 +135,7 @@ export class DrawerCategoriaComponent implements AfterViewInit {
         this.categorias = null;
         this.subCategoria = null;
 
-        if (categorias[0].sub_categorias.length > 0) {
+        if (categorias[0].sub_categorias && categorias[0].sub_categorias.length > 0) {
           this.categorias = categorias[0].sub_categorias;
         } else if (categorias[0].lugares.length > 0) {
           this.lugares = categorias[0].lugares;

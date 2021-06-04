@@ -10,16 +10,11 @@
 
   <div class="search">
 
-    <ng-template #suggestions let-attrs="attrs" class="suggestion-template">
-      <!-- <ion-item> -->
+    <ng-template #suggestions let-attrs="attrs" class="suggestion-template">      
       <ion-icon name="pin-outline" slot="start" color="primary"></ion-icon>
       <ion-label style="color: black;">
         {{ attrs.data.nombre }}
       </ion-label>
-      <!-- <ion-text >
-          <span [innerHtml]="attrs.data.name | boldprefix:attrs.keyword"></span> ({{ attrs.data.nativeName }})
-        </ion-text> -->
-      <!-- </ion-item> -->
     </ng-template>
 
     <ng-template #emptyTemplate let-attrs="attrs">

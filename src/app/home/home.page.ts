@@ -183,6 +183,10 @@ export class HomePage implements OnInit {
     //   { 'relevancia': { '$in': 'muy_alta' } },
     //   { 'relevancia': { '$in': 'alta' } }
     // ]
+    if (categoria == 'circuito') {
+      return;
+    }
+
     let paramsCat = {
       'slug': categoria
     }
@@ -428,6 +432,7 @@ export class HomePage implements OnInit {
   }
 
   backCircuitos() {
+    stackRouteDrawer.pop()
     this.showCircuitos = false;
     this.showDrawerPrincipal = true;
     this.showDrawerCategoria = false;
