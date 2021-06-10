@@ -39,6 +39,7 @@ export class HomePage implements OnInit {
   backButton = null;
   loading = false;
   dragendEventAttach = false;
+  showSearch = false;
 
   constructor(public modalController: ModalController,
     private splashScreen: SplashScreen,
@@ -76,8 +77,8 @@ export class HomePage implements OnInit {
 
         }).catch((error) => {
           console.log('Error getting location', error);
-          let lat = -28.1331273;
-          let lang = -54.6580317;
+          let lat = -26.8152792;
+          let lang = -54.4630297;
           this.mapa = this.mapBoxService.mostrarMapa('map', lat, lang)
           // let coordinates = `${resp.coords.latitude},${resp.coords.longitude}`
           this.coordinates.latitud = lat
@@ -441,6 +442,10 @@ export class HomePage implements OnInit {
 
   goToPath(path) {
     this.router.navigate([path])
+  }
+
+  toggleSearch() {
+    this.showSearch = !this.showSearch
   }
 
 }

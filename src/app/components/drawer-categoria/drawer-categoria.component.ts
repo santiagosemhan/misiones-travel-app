@@ -28,6 +28,8 @@ export class DrawerCategoriaComponent implements AfterViewInit {
   hoja;
   padre;
   // loading = true;
+  isoDateString = new Date().toISOString();
+  imagenGenerica = `https://misiones-travel-fs.s3.sa-east-1.amazonaws.com/icon_4b335a8779.png?v=${this.isoDateString}`
 
   isOpen = false;
   openHeight = 0;

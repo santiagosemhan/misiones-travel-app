@@ -74,14 +74,9 @@ export class MapboxService {
 
   marker(map, lng, lat) {
 
-    let el = document.createElement('div');
-    el.className = 'marker';
-    el.style.backgroundImage = `url(assets/pins/pin_ud_esta_aqui.svg)`
-    el.style.width = '50px';
-    el.style.height = '50px';
-    el.style.backgroundRepeat = 'no-repeat';
-
-    return new mapboxgl.Marker(el)
+    return new mapboxgl.Marker({
+      draggable: true,
+    })
       .setLngLat([lng, lat])
       .addTo(map);
   }
@@ -182,7 +177,7 @@ export class MapboxService {
   }
 
   updateLayerNoCenter(zoom = 12, geoJson, callback) {
-  
+
     let map = this.mapa
 
     // // remove all markers

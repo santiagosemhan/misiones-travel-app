@@ -31,6 +31,8 @@ export class DrawerCircuitosComponent implements OnInit {
   circuitoSelected;
   distancia = 0;
   localidades = [];
+  isoDateString = new Date().toISOString();
+  imagenGenerica = `https://misiones-travel-fs.s3.sa-east-1.amazonaws.com/icon_4b335a8779.png?v=${this.isoDateString}`
 
 
   constructor(private platform: Platform, private gestureCtrl: GestureController,

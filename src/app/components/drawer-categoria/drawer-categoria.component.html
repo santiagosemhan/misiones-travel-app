@@ -28,7 +28,7 @@
         <ion-thumbnail (click)="openSubCategoria(itemSubCategoria)">
           <img *ngIf="itemSubCategoria.imagen" [src]="itemSubCategoria.imagen?.formats.thumbnail.url">
           <img *ngIf="!itemSubCategoria.imagen"
-            src="https://misiones-travel-fs.s3.sa-east-1.amazonaws.com/icon_4b335a8779.png">
+            [src]="imagenGenerica">
           <ion-label>{{itemSubCategoria.nombre}}</ion-label>
 
         </ion-thumbnail>
@@ -57,7 +57,7 @@
           <img *ngIf="itemSubCategoria.imagen_miniatura"
             [src]="itemSubCategoria.imagen_miniatura?.formats.thumbnail.url">
           <img *ngIf="!itemSubCategoria.imagen_miniatura"
-            src="https://misiones-travel-fs.s3.sa-east-1.amazonaws.com/icon_4b335a8779.png">
+            [src]="imagenGenerica">
           <ion-label>{{itemSubCategoria.nombre}}</ion-label>
         </ion-thumbnail>
       </ion-slide>

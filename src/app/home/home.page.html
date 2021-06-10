@@ -7,8 +7,7 @@
 </ion-header>
 <ion-content [fullscreen]="true" scrollY="false">
 
-
-  <div class="search">
+  <div class="search" *ngIf="showSearch">
 
     <ng-template #suggestions let-attrs="attrs" class="suggestion-template">      
       <ion-icon name="pin-outline" slot="start" color="primary"></ion-icon>
@@ -25,11 +24,19 @@
 
     <ion-auto-complete [dataProvider]="lugaresService" 
     [emptyTemplate]="emptyTemplate"    
-    [template]="suggestions" (itemSelected)="goToLugar($event.id)"
+    [template]="suggestions" (itemSelected)="openLugar($event)"
       [styles]="{'searchbar': {'--border-radius': '2rem'}, 'list':{'width': '90%'}}"
       [options]="{ placeholder : 'Buscar', color: 'blanco'}">
     </ion-auto-complete>
   </div>
+
+  <ion-fab slot="fixed" size="small" vertical="top" horizontal="end" translucent="true">
+    <ion-fab-button (click)="toggleSearch()">
+      <ion-icon name="search" *ngIf="!showSearch"></ion-icon>
+      <ion-icon name="close-circle-outline" *ngIf="showSearch"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  
 
   <div id="map" style="height: 100%; width: 100%;"></div>
 
