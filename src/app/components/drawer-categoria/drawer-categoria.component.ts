@@ -48,13 +48,22 @@ export class DrawerCategoriaComponent implements AfterViewInit {
     { 'alojamiento': '#22B573' },
     { 'gastronomia': '#0071BB' },
     { 'cupones': '#F47621' }
-  ]
+  ];
+
+  relevancia = [];
+
 
   // colores
   changeLog: string[] = [];
 
   constructor(private platform: Platform, private gestureCtrl: GestureController,
     private apiService: ApiService) {
+
+    this.relevancia["muy_baja"] = 0;
+    this.relevancia["baja"] = 1;
+    this.relevancia["regular"] = 3;
+    this.relevancia["alta"] = 4;
+    this.relevancia["muy_alta"] = 5;
   }
 
   ngOnInit() {
@@ -83,27 +92,6 @@ export class DrawerCategoriaComponent implements AfterViewInit {
     this.loadCategorias();
     this.loadCategoriaPrincipal();
   }
-
-  // ngOnChanges(changes: SimpleChanges) {
-  //   console.log('changes', changes)
-
-  //   // if (changes.categoria && changes.categoria.previousValue) {
-
-  //   // if (changes.categoria.previousValue == "imperdibles" ||
-  //   //   changes.categoria.previousValue == "atracciones") {
-  //   //   this.categoria = changes.categoria.previousValue;
-  //   // } else if (changes.categoria.previousValue && (changes.categoria.previousValue.slug == "imperdibles" ||
-  //   //   changes.categoria.previousValue.slug == "atracciones")) {
-  //   //   this.categoria = changes.categoria.previousValue.slug;
-  //   // }
-
-  //   //   this.subCategoria = null;
-  //   this.loadCategorias();
-
-  //   // }
-
-
-  // }
 
   async loadCategoriaPrincipal() {
     this.loading = true;
@@ -211,8 +199,22 @@ export class DrawerCategoriaComponent implements AfterViewInit {
 
       this.apiService.get(`categorias/${itemSubCategoria.id}`).subscribe(
         (categorias: any) => {
-          // console.log('${itemSubCategoria.id}', categorias)
-          this.lugares = categorias.lugares
+          
+          // ordeno lugares por relevancia
+          let lug = categorias.lugares.sort((a, b) => {
+
+            if (a.relevancia === undefined || a.relevancia === null) {              
+              a.relevancia = 'muy_baja'
+            }
+
+            if (b.relevancia === undefined || b.relevancia === null) {
+              a.relevancia = 'muy_baja'
+            }
+
+            return this.relevancia[a.relevancia] - this.relevancia[b.relevancia];
+          });
+
+          this.lugares = lug.reverse();
           this.redrawMap.emit(categorias);
           this.loading = false;
         });

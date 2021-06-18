@@ -294,6 +294,7 @@ export class HomePage implements OnInit {
   }
 
   openLugar($event) {
+    console.log('$event', $event)
     this.categoriaSelected = $event;
     this.esLugar = true;
 
@@ -301,6 +302,35 @@ export class HomePage implements OnInit {
       center: this.categoriaSelected.location.coordinates,
       zoom: 16
     });
+
+    // add marker
+
+    let lugar = $event;
+    let geoJson = {
+      type: 'FeatureCollection',
+      features: []
+    };
+
+    geoJson.features.push(
+      {
+        "type": "Feature",
+        "geometry": lugar.location,
+        "properties": {
+          "title": lugar.nombre,
+          "id": lugar.id,
+          "icon": {
+            "iconUrl": `/assets/pins/pin_atracciones.svg`, //TODO obtener pin de la categoria
+            "iconSize": [30, 30], // size of the icon
+            "iconAnchor": [25, 25], // point of the icon which will correspond to marker's location
+            "popupAnchor": [0, -25], // point from which the popup should open relative to the iconAnchor
+            "className": "dot"
+          }
+        }
+      }
+    )
+    this.mapBoxService.addMarker(this.mapa, geoJson.features[0], (id) => { this.goToLugar(id) } )
+    // add marker
+
     this.goToLugar(this.categoriaSelected.id);
   }
 

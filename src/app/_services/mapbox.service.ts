@@ -75,7 +75,7 @@ export class MapboxService {
   marker(map, lng, lat) {
 
     return new mapboxgl.Marker({
-      draggable: true,
+      draggable: false,
     })
       .setLngLat([lng, lat])
       .addTo(map);
@@ -126,52 +126,11 @@ export class MapboxService {
       }
     }
 
-    geoJson.features.forEach(function (marker) {
+    geoJson.features.forEach((marker) => {
       // console.log('marker', marker)
       if (marker.geometry) {
-        // create a DOM element for the marker
-        let el = document.createElement('div');
-        el.className = 'marker';
-        el.style.backgroundImage = `url(${marker.properties.icon.iconUrl})`
-        el.style.width = marker.properties.icon.iconSize[0] + 'px';
-        el.style.height = marker.properties.icon.iconSize[1] + 'px';
-        el.style.backgroundRepeat = 'no-repeat';
-
-        el.addEventListener('click', function () {
-          // goto atraccion
-          // window.alert(marker.properties.title);
-          // callback(marker.properties.id)
-          map.flyTo({
-            center: marker.geometry.coordinates,
-            zoom: 16
-          });
-        });
-
-        let elementPopup = document.createElement('div');
-        elementPopup.append(`${marker.properties.title}`)
-
-        elementPopup.addEventListener('click', function () {
-          // goto atraccion
-          // window.alert(marker.properties.title);
-          callback(marker.properties.id)
-        });
-
-        let popup = new mapboxgl.Popup(
-          {
-            offset: 25,
-            className: 'popup-marker'
-          }
-        )
-          // .setText(marker.properties.title)
-          .setDOMContent(elementPopup);
-
-        // add marker to map
-        new mapboxgl.Marker(el)
-          .setLngLat(marker.geometry.coordinates)
-          .setPopup(popup)
-          .addTo(map);
+        this.addMarker(map, marker, callback)
       }
-
     });
 
   }
@@ -192,54 +151,57 @@ export class MapboxService {
       }
     }
 
-    geoJson.features.forEach(function (marker) {
+    geoJson.features.forEach((marker) => {
       // console.log('marker', marker)
       if (marker.geometry) {
-        // create a DOM element for the marker
-        let el = document.createElement('div');
-        el.className = 'marker';
-        el.style.backgroundImage = `url(${marker.properties.icon.iconUrl})`
-        el.style.width = marker.properties.icon.iconSize[0] + 'px';
-        el.style.height = marker.properties.icon.iconSize[1] + 'px';
-        el.style.backgroundRepeat = 'no-repeat';
-
-        el.addEventListener('click', function () {
-          // goto atraccion
-          // window.alert(marker.properties.title);
-          // callback(marker.properties.id)
-          map.flyTo({
-            center: marker.geometry.coordinates,
-            zoom: 16
-          });
-        });
-
-        let elementPopup = document.createElement('div');
-        elementPopup.append(`${marker.properties.title}`)
-
-        elementPopup.addEventListener('click', function () {
-          // goto atraccion
-          // window.alert(marker.properties.title);
-          callback(marker.properties.id)
-        });
-
-        let popup = new mapboxgl.Popup(
-          {
-            offset: 25,
-            className: 'popup-marker'
-          }
-        )
-          // .setText(marker.properties.title)
-          .setDOMContent(elementPopup);
-
-        // add marker to map
-        new mapboxgl.Marker(el)
-          .setLngLat(marker.geometry.coordinates)
-          .setPopup(popup)
-          .addTo(map);
+        this.addMarker(map, marker, callback)
       }
-
     });
 
+  }
+
+  addMarker(map, marker, callback) {
+    // create a DOM element for the marker
+    let el = document.createElement('div');
+    el.className = 'marker';
+    el.style.backgroundImage = `url(${marker.properties.icon.iconUrl})`
+    el.style.width = marker.properties.icon.iconSize[0] + 'px';
+    el.style.height = marker.properties.icon.iconSize[1] + 'px';
+    el.style.backgroundRepeat = 'no-repeat';
+
+    el.addEventListener('click', function () {
+      // goto atraccion
+      // window.alert(marker.properties.title);
+      // callback(marker.properties.id)
+      map.flyTo({
+        center: marker.geometry.coordinates,
+        zoom: 16
+      });
+    });
+
+    let elementPopup = document.createElement('div');
+    elementPopup.append(`${marker.properties.title}`)
+
+    elementPopup.addEventListener('click', function () {
+      // goto atraccion
+      // window.alert(marker.properties.title);
+      callback(marker.properties.id)
+    });
+
+    let popup = new mapboxgl.Popup(
+      {
+        offset: 25,
+        className: 'popup-marker'
+      }
+    )
+      // .setText(marker.properties.title)
+      .setDOMContent(elementPopup);
+
+    // add marker to map
+    new mapboxgl.Marker(el)
+      .setLngLat(marker.geometry.coordinates)
+      .setPopup(popup)
+      .addTo(map);
   }
 
   drawPrincipales(elementId, lat = -27.3773499, lng = -55.8801476, geoJson, callback) {
@@ -256,55 +218,11 @@ export class MapboxService {
 
     // map.addControl(new mapboxgl.NavigationControl());
 
-    geoJson.features.forEach(function (marker) {
+    geoJson.features.forEach((marker) => {
       // console.log('marker', marker)
       if (marker.geometry) {
-        // create a DOM element for the marker
-        let el = document.createElement('div');
-        el.className = 'marker';
-        el.style.backgroundImage = `url(${marker.properties.icon.iconUrl})`
-        el.style.width = marker.properties.icon.iconSize[0] + 'px';
-        el.style.height = marker.properties.icon.iconSize[1] + 'px';
-        el.style.backgroundRepeat = 'no-repeat';
-
-        el.addEventListener('click', function () {
-          // goto atraccion
-          // window.alert(marker.properties.title);
-          // callback(marker.properties.id)
-          map.flyTo({
-            center: marker.geometry.coordinates,
-            zoom: 16
-          });
-        });
-
-        let elementPopup = document.createElement('div');
-        elementPopup.append(`${marker.properties.title}`)
-
-        elementPopup.addEventListener('click', function () {
-          // goto atraccion
-          // window.alert(marker.properties.title);
-          callback(marker.properties.id)
-        });
-
-        let popup = new mapboxgl.Popup(
-          {
-            offset: 25,
-            className: 'popup-marker'
-          }
-        )
-          // .setText(marker.properties.title)
-          .setDOMContent(elementPopup)
-          ;
-
-
-
-        // add marker to map
-        new mapboxgl.Marker(el)
-          .setLngLat(marker.geometry.coordinates)
-          .setPopup(popup)
-          .addTo(map);
+        this.addMarker(map, marker, callback)
       }
-
     });
 
   }
@@ -328,65 +246,13 @@ export class MapboxService {
       a.remove()
     })
 
-    geoJson.features.forEach(function (marker) {
-      console.log('marker', marker)
+    geoJson.features.forEach((marker) => {
+      // console.log('marker', marker)
       if (marker.geometry) {
-        // create a DOM element for the marker
-        let el = document.createElement('div');
-        el.className = 'marker';
-        el.style.backgroundImage = `url(${marker.properties.icon.iconUrl})`
-        el.style.width = marker.properties.icon.iconSize[0] + 'px';
-        el.style.height = marker.properties.icon.iconSize[1] + 'px';
-        el.style.backgroundRepeat = 'no-repeat';
-
-        el.addEventListener('click', function (e) {
-          // goto atraccion
-          // window.alert(marker.properties.title);
-          // callback(marker.properties.id)
-          map.flyTo({
-            center: marker.geometry.coordinates,
-            zoom: 16
-          });
-        });
-
-        let elementPopup = document.createElement('div');
-        elementPopup.append(`${marker.properties.title}`)
-
-        elementPopup.addEventListener('click', function () {
-          // goto atraccion
-          // window.alert(marker.properties.title);
-          callback(marker.properties.id)
-        });
-
-        let popup = new mapboxgl.Popup(
-          {
-            offset: 25,
-            className: 'popup-marker'
-          }
-        )
-          // .setText(marker.properties.title)
-          .setDOMContent(elementPopup)
-          ;
-
-
-
-        // add marker to map
-        new mapboxgl.Marker(el)
-          .setLngLat(marker.geometry.coordinates)
-          .setPopup(popup)
-          .addTo(map);
+        this.addMarker(map, marker, callback)
       }
     });
 
-    // console.log('coordinates', coordinates)
-
-    // if (map.getSource('route')) {
-    //   // map.removeSource('route');
-    //   map.getSource('route').setData({});
-    // }
-    // if (map.getLayer('route')) {
-    //   map.removeLayer('route');
-    // }
 
     this.getDirections(coordinates, modalidad).subscribe((result: any) => {
       console.log('getDirections', result)
