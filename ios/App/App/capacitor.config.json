@@ -14,5 +14,8 @@
       "SplashScreenDelay": "3000",
       "ShowSplashScreenSpinner": false
     }
+  },
+  "server":{
+    "cleartext": true
   }
 }
