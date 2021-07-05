@@ -4,4 +4,5 @@
     <string name="title_activity_main">Misiones Travel</string>
     <string name="package_name">ar.com.misionestravelapp</string>
     <string name="custom_url_scheme">ar.com.misionestravelapp</string>
+    <string name="GPS_REQUIRED">false</string>
 </resources>

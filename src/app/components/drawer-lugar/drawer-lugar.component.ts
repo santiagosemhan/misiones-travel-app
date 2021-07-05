@@ -96,11 +96,16 @@ export class DrawerLugarComponent implements OnInit {
 
 
 
-  async ngAfterViewInit() {
+  async ngAfterViewInit() {    
 
     const drawerLugar = this.drawerLugar.nativeElement;
     this.openHeight = (this.platform.height() / 100) * 30;
     // console.log('openHeight', this.openHeight)
+
+    if (this.lugar.descripcion == null || this.lugar.descripcion === "") {
+      return;
+    }
+
     const gesture = await this.gestureCtrl.create({
       el: drawerLugar,
       gestureName: 'swipe',
@@ -132,6 +137,11 @@ export class DrawerLugarComponent implements OnInit {
   }
 
   toggleDrawer() {
+
+    if (this.lugar.descripcion == null || this.lugar.descripcion === "") {
+      return;
+    }
+
     const drawerLugar = this.drawerLugar.nativeElement;
     this.openState.emit(!this.isOpen);
 
@@ -157,14 +167,14 @@ export class DrawerLugarComponent implements OnInit {
   abrirWeb() {
     window.open(this.lugar.sitio_web, '_system');
   }
-  email() {    
+  email() {
     window.open(`mailto:${this.lugar.email}`, '_system');
   }
   llamar() {
     window.open(`tel:${this.lugar.telefono}`, '_system');
   }
   comoLlegar() {
-    if (this.platform.is('android')) {      
+    if (this.platform.is('android')) {
       window.location.href = `https://maps.google.com/?q=${this.lugar.geoposicion.latitud},${this.lugar.geoposicion.longitud}`;
     } else {
       window.location.href = `maps://maps.apple.com/?q=${this.lugar.geoposicion.latitud},${this.lugar.geoposicion.longitud}`;

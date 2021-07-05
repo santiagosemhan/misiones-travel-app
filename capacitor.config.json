@@ -4,10 +4,9 @@
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
-  "plugins": {
-  },
+  "plugins": {},
   "cordova": {
-    "preferences": {      
+    "preferences": {
       "FadeSplashScreenDuration": "300",
       "SplashShowOnlyFirstTime": "false",
       "SplashScreen": "screen",
@@ -15,7 +14,7 @@
       "ShowSplashScreenSpinner": false
     }
   },
-  "server":{
+  "server": {
     "cleartext": true
   }
 }

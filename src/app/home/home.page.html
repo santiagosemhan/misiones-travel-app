@@ -30,9 +30,11 @@
     </ion-auto-complete>
   </div>
 
-  <ion-fab slot="fixed" size="small" vertical="top" horizontal="end" translucent="true">
-    <ion-fab-button (click)="toggleSearch()">
-      <ion-icon name="search" *ngIf="!showSearch"></ion-icon>
+  <ion-fab slot="fixed" vertical="top" horizontal="end" translucent="true" class="search-fab">
+    <ion-fab-button (click)="toggleSearch()" *ngIf="!showSearch">
+      <ion-icon name="search"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-button (click)="toggleSearch()" size="small" *ngIf="showSearch">      
       <ion-icon name="close-circle-outline" *ngIf="showSearch"></ion-icon>
     </ion-fab-button>
   </ion-fab>

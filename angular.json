@@ -44,7 +44,10 @@
                 "input": "src/global.scss"
               }
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "showdown"
+           ]
           },
           "configurations": {
             "production": {

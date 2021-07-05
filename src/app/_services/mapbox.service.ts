@@ -74,11 +74,15 @@ export class MapboxService {
 
   marker(map, lng, lat) {
 
-    return new mapboxgl.Marker({
-      draggable: false,
+    let marker = new mapboxgl.Marker({
+      draggable: false
     })
       .setLngLat([lng, lat])
       .addTo(map);
+
+    marker.getElement().style.zIndex = '999999';
+
+    return marker;
   }
 
 

@@ -1,3 +1,4 @@
+import { timeout } from 'rxjs/operators';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { LugaresService } from './../_services/lugares.service';
 import { stackRouteDrawer, stackRouteDw, mainCategory } from './../_globals/globals';
@@ -55,17 +56,20 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
 
-    this.msgService.presentLoading('Cargando...')
     this.loadLugares();
 
   }
 
   initMap() {
     return new Promise(resolve => {
-      setTimeout(() => {
+      setTimeout(async () => {
         console.log('initmap')
 
-        this.geolocation.getCurrentPosition().then((resp) => {
+        let loading = await this.msgService.presentLoading('Estableciendo tu ubicación')
+        this.geolocation.getCurrentPosition({
+          maximumAge: 60000 * 3,
+          timeout: 3500,
+        }).then((resp) => {
           // resp.coords.latitude
           // resp.coords.longitude
           console.log('getCurrentPosition', resp)
@@ -73,9 +77,12 @@ export class HomePage implements OnInit {
           // let coordinates = `${resp.coords.latitude},${resp.coords.longitude}`
           this.coordinates.latitud = resp.coords.latitude
           this.coordinates.longitud = resp.coords.longitude
+          loading.dismiss()
           resolve('resolved');
 
         }).catch((error) => {
+          loading.dismiss()
+          this.msgService.presentToast('No pudimos establecer correctamente. Fijate si tu GPS está activado.')
           console.log('Error getting location', error);
           let lat = -26.8152792;
           let lang = -54.4630297;
@@ -92,20 +99,21 @@ export class HomePage implements OnInit {
   }
 
   async loadLugares() {
-    const reslt = await this.initMap();
+    try {
+      const reslt = await this.initMap();
+
+    } catch (error) {
+
+    }
+
+    this.msgService.presentLoading('Cargando...')
     this.splashScreen.hide();
 
     let limit = 25;
-    let paramsImerpdibles = {
-      'slug': 'imperdibles',
-    }
-    let paramsAtracciones = {
-      'slug': 'atracciones'
-    }
 
     forkJoin({
-      imperdibles: this.apiService.get(`categorias?slug_in=imperdibles`),
-      atracciones: this.apiService.get(`categorias?slug_in=atracciones&slug_in=atracciones-camping&slug_in=atracciones-mirador-punto-panoramico`),
+      imperdibles: this.apiService.get(`categorias?slug_in=imperdibles`).pipe(timeout(4600)),
+      atracciones: this.apiService.get(`categorias?slug_in=atracciones&slug_in=atracciones-camping&slug_in=atracciones-mirador-punto-panoramico`).pipe(timeout(4600)),
     }).subscribe((arrData) => {
       // console.log('arrData', arrData)
       this.msgService.dismissLoading()
@@ -174,6 +182,10 @@ export class HomePage implements OnInit {
       this.mapBoxService.drawPrincipales('map', this.coordinates.latitud, this.coordinates.longitud, geoJson, (id) => { this.goToLugar(id) })
 
 
+    }, (err) => {
+      this.msgService.dismissLoading()
+      // this.msgService.presentAlert('Ha ocurrido un error')
+      console.log(err)
     });
 
   }
@@ -328,7 +340,7 @@ export class HomePage implements OnInit {
         }
       }
     )
-    this.mapBoxService.addMarker(this.mapa, geoJson.features[0], (id) => { this.goToLugar(id) } )
+    this.mapBoxService.addMarker(this.mapa, geoJson.features[0], (id) => { this.goToLugar(id) })
     // add marker
 
     this.goToLugar(this.categoriaSelected.id);

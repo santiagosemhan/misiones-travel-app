@@ -6,7 +6,8 @@
       Llamar
     </ion-button>
 
-    <ion-button size="small" shape="round" color="blanco" class="button-info" *ngIf="lugar.sitio_web" (click)="abrirWeb()">
+    <ion-button size="small" shape="round" color="blanco" class="button-info" *ngIf="lugar.sitio_web"
+      (click)="abrirWeb()">
       <ion-icon slot="start" name="globe-outline"></ion-icon>
       Web
     </ion-button>
@@ -41,9 +42,11 @@
 
   <div class="descripcion ion-padding">
     <h1><strong>{{ lugar.nombre }}</strong></h1>
-    <p>
-      {{ lugar.descripcion }}
-    </p>
+    
+    <div *ngIf="lugar.descripcion !== '' || lugar.descripcion!== null">
+      <showdown [value]="lugar.descripcion"></showdown>
+    </div>
+    
   </div>
 
 </div>
