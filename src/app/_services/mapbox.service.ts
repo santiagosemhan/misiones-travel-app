@@ -80,7 +80,7 @@ export class MapboxService {
       .setLngLat([lng, lat])
       .addTo(map);
 
-    marker.getElement().style.zIndex = '999999';
+    marker.getElement().style.zIndex = '11';
 
     return marker;
   }
@@ -202,10 +202,12 @@ export class MapboxService {
       .setDOMContent(elementPopup);
 
     // add marker to map
-    new mapboxgl.Marker(el)
+    let newMarker = new mapboxgl.Marker(el)
       .setLngLat(marker.geometry.coordinates)
       .setPopup(popup)
       .addTo(map);
+
+      newMarker.getElement().style.zIndex = '10';
   }
 
   drawPrincipales(elementId, lat = -27.3773499, lng = -55.8801476, geoJson, callback) {

@@ -53,15 +53,6 @@
       {{circuitoSelected.descripcion}}
     </p>
     <div class="timeline">
-      <!-- <ion-list>
-        <ion-item *ngFor="let circuito of circuitoSelected.circuito">
-          <ion-note color="light" slot="start">{{circuito.distancia}} {{circuito.unidad_distancia}},
-            {{circuito.tipo_ruta}}</ion-note>
-          <ion-label class="ion-text-wrap">
-            <h2>{{ circuito.lugar.nombre }}</h2>
-          </ion-label>
-        </ion-item>
-      </ion-list> -->
       <ion-grid>
         <ion-row *ngFor="let circuito of circuitoSelected.circuito">
           <ion-col size="3" class="ion-align-self-end">

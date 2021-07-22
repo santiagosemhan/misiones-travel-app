@@ -119,7 +119,7 @@ export class DrawerCategoriaComponent implements AfterViewInit {
     }
     await this.apiService.get('categorias', params).subscribe(
       (categorias: any) => {
-        console.log('getCategroia', categorias[0])
+        console.log('getCategoria', categorias[0])
         this.currentCategoria = categorias[0];
         this.lugares = null;
         this.categorias = null;
@@ -128,7 +128,8 @@ export class DrawerCategoriaComponent implements AfterViewInit {
         if (categorias[0].sub_categorias && categorias[0].sub_categorias.length > 0) {
           this.categorias = categorias[0].sub_categorias;
         } else if (categorias[0].lugares.length > 0) {
-          this.lugares = categorias[0].lugares;
+          // this.lugares = categorias[0].lugares;
+          this.lugares = this.sort(categorias[0])
         }
 
         // console.log('loadCategorias', categorias, this.categorias)
@@ -201,20 +202,9 @@ export class DrawerCategoriaComponent implements AfterViewInit {
         (categorias: any) => {
           
           // ordeno lugares por relevancia
-          let lug = categorias.lugares.sort((a, b) => {
+          let lug = this.sort(categorias)
 
-            if (a.relevancia === undefined || a.relevancia === null) {              
-              a.relevancia = 'muy_baja'
-            }
-
-            if (b.relevancia === undefined || b.relevancia === null) {
-              a.relevancia = 'muy_baja'
-            }
-
-            return this.relevancia[a.relevancia] - this.relevancia[b.relevancia];
-          });
-
-          this.lugares = lug.reverse();
+          this.lugares = lug;
           this.redrawMap.emit(categorias);
           this.loading = false;
         });
@@ -225,6 +215,23 @@ export class DrawerCategoriaComponent implements AfterViewInit {
 
   openLugar(lugar) {
     this.btnLugarClick.emit(lugar);
+  }
+
+  sort(toSort){
+    let lug = toSort.lugares.sort((a, b) => {
+
+      if (a.relevancia === undefined || a.relevancia === null) {              
+        a.relevancia = 'muy_baja'
+      }
+
+      if (b.relevancia === undefined || b.relevancia === null) {
+        a.relevancia = 'muy_baja'
+      }
+
+      return this.relevancia[a.relevancia] - this.relevancia[b.relevancia];
+    });
+
+    return lug.reverse();
   }
 
 
