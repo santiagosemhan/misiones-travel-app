@@ -21,6 +21,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DateFnsConfigurationService, DateFnsModule } from 'ngx-date-fns';
 import { es } from 'date-fns/locale';
+import { MarkdownModule } from 'ngx-markdown';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -50,7 +51,8 @@ frenchConfig.setLocale(es);
       driverOrder: ['indexeddb', 'sqlite', 'websql']
     }),
     BrowserAnimationsModule,
-    DateFnsModule.forRoot()
+    DateFnsModule.forRoot(),
+    MarkdownModule.forRoot(),
   ],
   providers: [
     StatusBar,

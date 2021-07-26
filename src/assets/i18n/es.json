@@ -35,6 +35,11 @@
         "LOCATION_STORING_LOCATION_ERROR": "Error enviando la ubicación",
         "LOCATION_STORING_LOCATION_SUCCESS": "Ubicación enviada con éxito",
         "FIELD_REQUIRED": "Campo obligatorio",
-        "APP_OUTDATED": "La aplicación está desactualizada, por favor actualice!"
+        "APP_OUTDATED": "La aplicación está desactualizada, por favor actualice!",
+        "muy_facil": "Muy Fácil",
+        "facil": "Fácil",
+        "medio": "Medio",
+        "dificil": "Difícil",
+        "muy_dificil": "Muy Difícil"
     }
 }

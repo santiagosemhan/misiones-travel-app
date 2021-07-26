@@ -1,4 +1,3 @@
-import { ShowdownModule } from 'ngx-showdown';
 import { MtSlideButtonLoadingComponent } from './mt-slide-button-loading/mt-slide-button-loading.component';
 import { ItemCuponComponent } from './item-cupon/item-cupon.component';
 import { DrawerCircuitosComponent } from './drawer-circuitos/drawer-circuitos.component';
@@ -10,6 +9,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { DateFnsModule, FormatDistanceToNowPipeModule, ParseIsoPipeModule, ParsePipeModule } from 'ngx-date-fns';
+import { MarkdownModule } from 'ngx-markdown';
 
 
 
@@ -30,7 +30,7 @@ import { DateFnsModule, FormatDistanceToNowPipeModule, ParseIsoPipeModule, Parse
     ParsePipeModule,
     ParseIsoPipeModule,
     FormatDistanceToNowPipeModule,
-    ShowdownModule
+    MarkdownModule
   ],
   exports: [
     DrawerComponent,

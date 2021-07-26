@@ -6,7 +6,7 @@
       </div>
     </ion-button>
   </div>
- 
+
   <mt-slide-button-loading *ngIf="loading" [slideOpts]="slideOpts"></mt-slide-button-loading>
 
   <div class="slide-categorias" *ngIf="categorias && !lugares && !loading">
@@ -27,8 +27,7 @@
       <ion-slide *ngFor="let itemSubCategoria of categorias">
         <ion-thumbnail (click)="openSubCategoria(itemSubCategoria)">
           <img *ngIf="itemSubCategoria.imagen" [src]="itemSubCategoria.imagen?.formats.thumbnail.url">
-          <img *ngIf="!itemSubCategoria.imagen"
-            [src]="imagenGenerica">
+          <img *ngIf="!itemSubCategoria.imagen" [src]="imagenGenerica">
           <ion-label>{{itemSubCategoria.nombre}}</ion-label>
 
         </ion-thumbnail>
@@ -56,8 +55,7 @@
         <ion-thumbnail (click)="openLugar(itemSubCategoria)">
           <img *ngIf="itemSubCategoria.imagen_miniatura"
             [src]="itemSubCategoria.imagen_miniatura?.formats.thumbnail.url">
-          <img *ngIf="!itemSubCategoria.imagen_miniatura"
-            [src]="imagenGenerica">
+          <img *ngIf="!itemSubCategoria.imagen_miniatura" [src]="imagenGenerica">
           <ion-label>{{itemSubCategoria.nombre}}</ion-label>
         </ion-thumbnail>
       </ion-slide>
@@ -68,17 +66,13 @@
   <div class="descripcion ion-padding" *ngIf="currentCategoria && !subCategoria">
     <!-- <label *ngIf="categoriaPrincipal">{{categoriaPrincipal}}/{{padre.nombre}}</label> -->
     <h1><strong>{{ currentCategoria.nombre }}</strong></h1>
-    <p>
-      {{ currentCategoria.descripcion }}
-    </p>
+    <markdown [data]="currentCategoria.descripcion"></markdown>
   </div>
 
   <div class="descripcion ion-padding" *ngIf="subCategoria">
     <label *ngIf="hoja">{{categoriaPrincipal}}/{{subCategoria.nombre}}</label>
     <h1><strong>{{ subCategoria.nombre }}</strong></h1>
-    <p>
-      {{ subCategoria.descripcion }}
-    </p>
+    <markdown [data]="subCategoria.descripcion"></markdown>
   </div>
 
 </div>

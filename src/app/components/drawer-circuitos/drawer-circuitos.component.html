@@ -27,8 +27,7 @@
       <ion-slide *ngFor="let item of circuitos">
         <ion-thumbnail (click)="openCircuito(item)">
           <img *ngIf="item.imagen_miniatura" [src]="item.imagen_miniatura?.formats.thumbnail.url">
-          <img *ngIf="!item.imagen_miniatura"
-            [src]="imagenGenerica">
+          <img *ngIf="!item.imagen_miniatura" [src]="imagenGenerica">
           <ion-label>{{item.nombre}}</ion-label>
 
         </ion-thumbnail>
@@ -38,7 +37,7 @@
 
   <div class="descripcion ion-padding" *ngIf="!circuitoSelected">
     <h1><strong>{{ 'HOME.circuitos' | translate }}</strong></h1>
-    
+
   </div>
   <div class="descripcion ion-padding" *ngIf="circuitoSelected">
     <label>{{ 'HOME.circuitos' | translate }}</label>
@@ -47,11 +46,9 @@
       <strong>Distancia:</strong> {{ circuitoSelected.distancia_total }} Kms<br>
       <strong>Terreno:</strong> {{circuitoSelected.terreno}}<br>
       <strong>Localidades:</strong> <span *ngFor="let localidad of localidades"> {{ localidad.nombre }} |</span> <br>
-      <strong>Dificultad:</strong> {{circuitoSelected.dificultad}}<br>
+      <strong>Dificultad:</strong> {{ 'COMMON.'+circuitoSelected.dificultad | translate}}<br>
     </p>
-    <p>
-      {{circuitoSelected.descripcion}}
-    </p>
+    <markdown [data]="circuitoSelected.descripcion"></markdown>
     <div class="timeline">
       <ion-grid>
         <ion-row *ngFor="let circuito of circuitoSelected.circuito">
@@ -63,9 +60,9 @@
               </strong>
             </div>
           </ion-col>
-          <ion-col class="lugar-line" (click)="goToLugar(circuito.lugar)">            
+          <ion-col class="lugar-line" (click)="goToLugar(circuito.lugar)">
             <div class="item-lugar">
-              <div class="dot"></div>              
+              <div class="dot"></div>
               {{ circuito.lugar.nombre }}
             </div>
           </ion-col>

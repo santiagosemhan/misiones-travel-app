@@ -42,11 +42,11 @@
 
   <div class="descripcion ion-padding">
     <h1><strong>{{ lugar.nombre }}</strong></h1>
-    
+
     <div *ngIf="lugar.descripcion !== '' || lugar.descripcion!== null">
-      <showdown [value]="lugar.descripcion"></showdown>
+      <markdown [data]="lugar.descripcion"></markdown>
     </div>
-    
+
   </div>
 
 </div>
